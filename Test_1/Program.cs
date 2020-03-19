@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Entities;
+using System;
 
 namespace Test_1
 {
@@ -7,6 +8,10 @@ namespace Test_1
         static void Main(string[] args)
         {
             Console.WriteLine("Hello World!");
+            string text = System.IO.File.ReadAllText("test.csv");
+            Console.WriteLine(text);
+            Menu menu = new Menu();
+			Console.WriteLine(menu.AdminMenuI());
         }
-    }
+	}
 }
