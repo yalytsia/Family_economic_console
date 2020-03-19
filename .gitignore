@@ -1,0 +1,86 @@
+
+#ignore thumbnails created by windows
+Thumbs.db
+#Ignore files build by Visual Studio
+*.obj
+*.exe
+*.pdb
+*.user
+*.aps
+*.pch
+*.vspscc
+*_i.c
+*_p.c
+*.ncb
+*.suo
+*.tlb
+*.tlh
+*.bak
+*.cache
+*.ilk
+*.log
+[Bb]in
+[Dd]ebug*/
+*.lib
+*.sbr
+obj/
+[Rr]elease*/
+_ReSharper*/
+[Tt]est[Rr]esult*
+[Bb]uild/[Rr]esults/
+[Bb]uild/*
+*.dbmdl
+build/InstallUtil.InstallLog
+_dotCover*
+*.DotSettings
+**/StyleCop.Cache
+*.Cache
+*.js.map
+
+**/.vs/*
+
+#Ignore NuGet
+**/packages/*
+!**/packages/repositories.config
+!**/nuget.exe
+
+#Cake
+Make/tools/**
+!Make/*.ps1
+!Make/*.cake
+!Make/tools/packages.config
+
+#Developer configuration files
+/Projects/**/Resources/Configuration/Configuration.*.xml
+**/Scripts/_references.js
+
+#Files & Directories from PostBuild event
+Base/Trunk/CI.CBS.MCI/CI.CBS.MCI.BackendWeb/Content/site.less
+Base/Trunk/CI.CBS.MCI/CI.CBS.MCI.BackendWeb/Content/Common/
+Base/Trunk/CI.CBS.MCI/CI.CBS.MCI.BackendWeb/Content/Images/sgFileBox/
+Base/Trunk/CI.CBS.MCI/CI.CBS.MCI.BackendWeb/Scripts/Common/
+Base/Trunk/CI.CBS.MCI/CI.CBS.MCI.BackendWeb/Scripts/SharedFromPublicWeb/
+Base/Trunk/CI.CBS.MCI/CI.CBS.MCI.BackendWeb/Views/Shared/Parts/Common/
+Base/Trunk/CI.CBS.MCI/CI.CBS.MCI.BackendWeb/Error.html
+
+#auto-copied font files
+Base/Trunk/CI.CBS.MCI/CI.CBS.MCI.BackendWeb/fonts/glyphicons-halflings-regular.eot
+Base/Trunk/CI.CBS.MCI/CI.CBS.MCI.BackendWeb/fonts/glyphicons-halflings-regular.svg
+Base/Trunk/CI.CBS.MCI/CI.CBS.MCI.BackendWeb/fonts/glyphicons-halflings-regular.ttf
+Base/Trunk/CI.CBS.MCI/CI.CBS.MCI.BackendWeb/fonts/glyphicons-halflings-regular.woff
+Base/Trunk/CI.CBS.MCI/CI.CBS.MCI.BackendWeb/fonts/glyphicons-halflings-regular.woff2
+Base/Trunk/CI.CBS.MCI/CI.CBS.MCI.BackendWeb/fonts/icons/credit-info.eot
+Base/Trunk/CI.CBS.MCI/CI.CBS.MCI.BackendWeb/fonts/opensans/OpenSans-Bold-webfont.eot
+Base/Trunk/CI.CBS.MCI/CI.CBS.MCI.BackendWeb/fonts/opensans/OpenSans-Regular-webfont.eot
+Base/Trunk/CI.CBS.MCI/CI.CBS.MCI.BackendWeb/fonts/opensans/OpenSans-Semibold-webfont.eot
+
+# min files from nuget packages
+Base/Trunk/CI.CBS.MCI/CI.CBS.MCI.BackendWeb/Scripts/angular-sanitize.min.js
+Base/Trunk/CI.CBS.MCI/CI.CBS.MCI.BackendWeb/Scripts/angular-sanitize.min.js.map
+
+# documentation files
+/Base/Trunk/CI.CBS.MCI/CI.CBS.MCI.DataContract/CI.CBS.MCI.DataContract.xml
+
+
+#Misc files
+/Base/Trunk/CI.CBS.MCI/UpgradeLog.htm
