@@ -4,7 +4,7 @@ namespace Entities
 {
     public class Menu
     {
-		public ConsoleKeyInfo AdminMenuI()
+		public int AdminMenuI()
 		{
 
 			Console.WriteLine("\nСделайте выбор:\n");
@@ -19,7 +19,7 @@ namespace Entities
 			//Console.WriteLine("9. Возврат в главное меню" );
 			Console.WriteLine("0. Выход");
 
-			ConsoleKeyInfo iAdminChoose = Console.ReadKey();
+			ConsoleKeyInfo iAdminChoose = Console.ReadKey(true);
 
 			if (char.IsDigit(iAdminChoose.KeyChar))
 			{
@@ -28,17 +28,19 @@ namespace Entities
 				{
 					ErrorMessage();
 				}
+				return menuItem;
 			}
 			else
 			{
 				ErrorMessage();
 			}
 
-			return iAdminChoose;
+			return -1;
 		}
 
 		private void ErrorMessage()
 		{
+			Console.Clear();
 			Console.WriteLine("Выберите число от 0 до 8.");
 			AdminMenuI();
 		}
