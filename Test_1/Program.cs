@@ -18,8 +18,8 @@ namespace Test_1
                 string filePath = @"test.csv";
                 Console.Clear();
                 Console.WriteLine("Добавить запись:");
-                var lastLine = File.ReadLines("test.csv").Where(x=>x.Length>0).Last();
-                var id = int.Parse(lastLine.Split(',')[0]);
+                string lastLine = File.ReadLines(filePath).Where(x=>x.Length>0).LastOrDefault();
+                int id = lastLine == null ? 0 : int.Parse(lastLine.Split(',')[0]);
                 string inputLine = String.Empty;
                 string csvLine;
                 int counter = 0;
@@ -29,7 +29,7 @@ namespace Test_1
                     if (csvLine != String.Empty)
                     {
                         id++;
-                        if (counter == 0)
+                        if (counter == 0 && id > 1)
                         {
                             inputLine = Environment.NewLine;
                         }
@@ -37,7 +37,8 @@ namespace Test_1
                     }
                     counter++;
                 } while (csvLine != String.Empty);
-                byte[] csvLineBytes = Encoding.Default.GetBytes(inputLine + Environment.NewLine);
+                inputLine = inputLine.TrimEnd(Environment.NewLine.ToCharArray());
+                byte[] csvLineBytes = Encoding.Default.GetBytes(inputLine);
                 using (MemoryStream ms = new MemoryStream())
                 {
                     using (FileStream file = new FileStream(filePath, FileMode.Open, FileAccess.Read))

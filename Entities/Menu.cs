@@ -4,6 +4,7 @@ namespace Entities
 {
     public class Menu
     {
+		int UserMenuChoose = -1;
 		public int AdminMenuI()
 		{
 
@@ -19,23 +20,24 @@ namespace Entities
 			//Console.WriteLine("9. Возврат в главное меню" );
 			Console.WriteLine("0. Выход");
 
-			ConsoleKeyInfo iAdminChoose = Console.ReadKey(true);
+			ConsoleKeyInfo userChoose = Console.ReadKey();
 
-			if (char.IsDigit(iAdminChoose.KeyChar))
+			if (char.IsDigit(userChoose.KeyChar))
 			{
-				var menuItem = int.Parse(iAdminChoose.KeyChar.ToString());
-				if (menuItem < 0 || menuItem > 8)
+				UserMenuChoose = int.Parse(userChoose.KeyChar.ToString());
+				if (UserMenuChoose < 0 || UserMenuChoose > 8)
 				{
 					ErrorMessage();
+
 				}
-				return menuItem;
+				return UserMenuChoose;
 			}
 			else
 			{
 				ErrorMessage();
 			}
 
-			return -1;
+			return UserMenuChoose;
 		}
 
 		private void ErrorMessage()
