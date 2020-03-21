@@ -39,7 +39,34 @@ namespace Entities
 
 			return UserMenuChoose;
 		}
+		public int СatalogMenu()
+		{
 
+			Console.WriteLine("\nСделайте выбор:\n");
+			Console.WriteLine("1. Товары");
+			Console.WriteLine("2. Категории товаров");
+			Console.WriteLine("3. Единицы измерения");
+			Console.WriteLine("0. Выход");
+
+			ConsoleKeyInfo userChoose = Console.ReadKey();
+
+			if (char.IsDigit(userChoose.KeyChar))
+			{
+				UserMenuChoose = int.Parse(userChoose.KeyChar.ToString());
+				if (UserMenuChoose < 0 || UserMenuChoose > 3)
+				{
+					ErrorMessage();
+
+				}
+				return UserMenuChoose;
+			}
+			else
+			{
+				ErrorMessage();
+			}
+
+			return UserMenuChoose;
+		}
 		private void ErrorMessage()
 		{
 			Console.Clear();
