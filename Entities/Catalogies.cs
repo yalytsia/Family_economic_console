@@ -4,9 +4,10 @@ using System.Text;
 
 namespace Entities
 {
-    class GoodsCategory
+    public enum Catalogies
     {
-        public string Name { get; set; }
-        public int Id { get; set; }
+        Goods = 1,
+        GoodsCategory = 2,
+        Unit = 3,
     }
 }

@@ -7,17 +7,14 @@ namespace Entities
 		int UserMenuChoose = -1;
 		public int AdminMenuI()
 		{
-
+			Console.Clear();
 			Console.WriteLine("\nСделайте выбор:\n");
-			Console.WriteLine("1. Просмотр записей");
-			Console.WriteLine("2. Добавить запись");
-			Console.WriteLine("3. Удалить запись");
-			Console.WriteLine("4. Искать запись");
-			Console.WriteLine("5. Редактировать запись");
-			Console.WriteLine("6. Сортировать записи");
-			Console.WriteLine("7. Записать все данные в файл");
-			Console.WriteLine("8. Изменить пароль");
-			//Console.WriteLine("9. Возврат в главное меню" );
+			Console.WriteLine("1. Добавить покупку" );
+			Console.WriteLine("2. Добавить запись в справочник");
+			Console.WriteLine("3. Редактировать запись");
+			Console.WriteLine("4. Удалить запись");
+			Console.WriteLine("5. Просмотр записей");
+			Console.WriteLine("6. Статистика");
 			Console.WriteLine("0. Выход");
 
 			ConsoleKeyInfo userChoose = Console.ReadKey();
@@ -39,14 +36,14 @@ namespace Entities
 
 			return UserMenuChoose;
 		}
-		public int СatalogMenu()
+		public int СatalogsMenu()
 		{
-
-			Console.WriteLine("\nСделайте выбор:\n");
+			Console.Clear();
+			Console.WriteLine("\nДобавить в:\n");
 			Console.WriteLine("1. Товары");
 			Console.WriteLine("2. Категории товаров");
 			Console.WriteLine("3. Единицы измерения");
-			Console.WriteLine("0. Выход");
+			Console.WriteLine("0. Выход в предыдущее меню");
 
 			ConsoleKeyInfo userChoose = Console.ReadKey();
 
