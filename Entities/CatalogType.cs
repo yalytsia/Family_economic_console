@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Entities
 {
-    public enum Catalogies
+    public enum CatalogType
     {
         Goods = 1,
         GoodsCategory = 2,

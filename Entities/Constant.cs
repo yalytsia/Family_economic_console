@@ -4,8 +4,8 @@ using System.Text;
 
 namespace Entities
 {
-    class Unit : Catalog
+    public class Constant
     {
-        
+        public const string Delimiter = ",";
     }
 }

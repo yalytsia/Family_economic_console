@@ -4,8 +4,9 @@ using System.Text;
 
 namespace Entities
 {
-    class Unit : Catalog
+    public class Catalog
     {
-        
+        public string Name { get; set; }
+        public int Id { get; set; }
     }
 }
