@@ -35,168 +35,215 @@ namespace Test_1
                     Expenses expenses = new Expenses();
                     bool isInputFinished = false;
                     Console.Clear();
-                    Console.WriteLine();
-                    Console.WriteLine("Введите категорию:");
+                   
                     while (!isInputFinished)
-                    {
-                        bool isInputFieldFinished = false;
-                        while (!isInputFieldFinished)
-                        {
-                            string inputLine = Console.ReadLine();
-                            int userInput = 0;
-                            List<Catalog> catalogs = GetList(CatalogType.GoodsCategory + ".csv");
-                            if (int.TryParse(inputLine, out userInput))
-                            {
-                                Catalog catalog = catalogs.FirstOrDefault(x => x.Id == userInput);
-                                if (catalog == null)
-                                {
-                                    Console.WriteLine("Категория с данным ID не существует.");
-                                }
-                                else
-                                {
-                                    expenses.CategoryId = userInput;
-                                    isInputFieldFinished = true;
-                                }
-                            }
-                            else
-                            {
-                                Catalog catalog = catalogs.FirstOrDefault(x => x.Name.StartsWith (inputLine));
-                                if (catalog == null)
-                                {
-                                    Console.WriteLine("Категория с данным именем не существует.");
-                                }
-                                else
-                                {
-                                    expenses.CategoryId = catalog.Id;
-                                    isInputFieldFinished = true;
-                                }
-                            }
-                        }
-                        Console.WriteLine();
-                        Console.WriteLine("Введите наименование товара:");
-                        isInputFieldFinished = false;
-                        while (!isInputFieldFinished)
-                        {
-                            string inputLine = Console.ReadLine();
-                            int userInput = 0;
-                            List<Catalog> catalogs = GetList(CatalogType.Goods + ".csv");
-                            if (int.TryParse(inputLine, out userInput))
-                            {
-                                Catalog catalog = catalogs.FirstOrDefault(x => x.Id == userInput);
-                                if (catalog == null)
-                                {
-                                    Console.WriteLine("Товар с данным ID не существует.");
-                                }
-                                else
-                                {
-                                    expenses.GoodsId = userInput;
-                                    isInputFieldFinished = true;
-                                }
-                            }
-                            else
-                            {
-                                Catalog catalog = catalogs.FirstOrDefault(x => x.Name.StartsWith(inputLine));
-                                if (catalog == null)
-                                {
-                                    Console.WriteLine("Товар с данным именем не существует.");
-                                }
-                                else
-                                {
-                                    expenses.GoodsId = catalog.Id;
-                                    isInputFieldFinished = true;
-                                }
-                            }
-                        }
-                        Console.WriteLine();
-                        Console.WriteLine("Введите единицы измерения товара:");
-                        isInputFieldFinished = false;
-                        while (!isInputFieldFinished)
-                        {
-                            string inputLine = Console.ReadLine();
-                            int userInput = 0;
-                            List<Catalog> catalogs = GetList(CatalogType.Unit + ".csv");
-                            if (int.TryParse(inputLine, out userInput))
-                            {
-                                Catalog catalog = catalogs.FirstOrDefault(x => x.Id == userInput);
-                                if (catalog == null)
-                                {
-                                    Console.WriteLine("Eдиницa измерения с данным ID не существует.");
-                                }
-                                else
-                                {
-                                    expenses.UnitId = userInput;
-                                    isInputFieldFinished = true;
-                                }
-                            }
-                            else
-                            {
-                                Catalog catalog = catalogs.FirstOrDefault(x => x.Name.StartsWith(inputLine));
-                                if (catalog == null)
-                                {
-                                    Console.WriteLine("Eдиницa измерения с данным именем не существует.");
-                                }
-                                else
-                                {
-                                    expenses.UnitId = catalog.Id;
-                                    isInputFieldFinished = true;
-                                }
-                            }
-                        }
-                        Console.WriteLine();
-                        Console.WriteLine("Введите цену товара:");
-                        isInputFieldFinished = false;
-                        while (!isInputFieldFinished)
-                        {
-                            string inputLine = Console.ReadLine();
-                            decimal userInput = 0;
-                            if (decimal.TryParse(inputLine, out userInput))
-                            {                                
-                                    expenses.Price = userInput;
-                                    isInputFieldFinished = true;                                
-                            }
-                            else
-                            {
-                                Console.WriteLine("Используйте только цифры для ввода цены.");
-                            }
-                        }
-                        Console.WriteLine();
-                        Console.WriteLine("Введите количество:");
-                        isInputFieldFinished = false;
-                        while (!isInputFieldFinished)
-                        {
-                            string inputLine = Console.ReadLine();
-                            int userInput = 0;
-                            if (int.TryParse(inputLine, out userInput))
-                            {
-                                expenses.Quantity = userInput;
-                                isInputFieldFinished = true;
-                            }
-                            else
-                            {
-                                Console.WriteLine("Используйте только цифры для ввода количества.");
-                            }
-                        }
-                        Console.WriteLine();
-                        Console.WriteLine("Введите дату покупки:");
-                        isInputFieldFinished = false;
-                        while (!isInputFieldFinished)
-                        {
-                            string inputLine = Console.ReadLine();
-                            DateTime userInput;
-                            if (DateTime.TryParse(inputLine, out userInput))
-                            {
-                                expenses.Date = userInput;
-                                isInputFieldFinished = true;
-                            }
-                            else
-                            {
-                                Console.WriteLine("Введите дату в формате (как-то).");
-                            }
-                        }
+                    {                      
+                        InputCategory(expenses);
+                        InputName(expenses);
+                        InputUnit(expenses);
+                        InputPrice(expenses);
+                        InputQuantity(expenses);
+                        InputDate(expenses);                        
                         isInputFinished = true;
+                    }
+                    AddExpense("Expenses", expenses);
+                }
+            }
+        }
+
+        private static bool InputDate(Expenses expenses)
+        {
+            bool isInputFieldFinished;
+            Console.WriteLine();
+            Console.WriteLine("Введите дату покупки:");
+            isInputFieldFinished = false;
+            while (!isInputFieldFinished)
+            {
+                string inputLine = Console.ReadLine();
+                DateTime userInput;
+                if (DateTime.TryParse(inputLine, out userInput))
+                {
+                    expenses.Date = userInput;
+                    isInputFieldFinished = true;
+                }
+                else
+                {
+                    Console.WriteLine("Введите дату в формате (как-то).");
+                }
+            }
+            return isInputFieldFinished;
+        }
+
+        private static bool InputQuantity(Expenses expenses)
+        {
+            bool isInputFieldFinished;
+            Console.WriteLine();
+            Console.WriteLine("Введите количество:");
+            isInputFieldFinished = false;
+            while (!isInputFieldFinished)
+            {
+                string inputLine = Console.ReadLine();
+                float userInput = 0;
+                if (float.TryParse(inputLine, out userInput) && userInput > 0)
+                {
+                    expenses.Quantity = userInput;
+                    isInputFieldFinished = true;
+                }
+                else
+                {
+                    Console.WriteLine("Используйте только цифры больше 0 и десятичные дроби для ввода количества.");
+                }
+            }
+
+            return isInputFieldFinished;
+        }
+
+        private static bool InputPrice(Expenses expenses)
+        {
+            bool isInputFieldFinished;
+            Console.WriteLine();
+            Console.WriteLine("Введите цену товара:");
+            isInputFieldFinished = false;
+            while (!isInputFieldFinished)
+            {
+                string inputLine = Console.ReadLine();
+                decimal userInput = 0;
+                if (decimal.TryParse(inputLine, out userInput))
+                {
+                    expenses.Price = userInput;
+                    isInputFieldFinished = true;
+                }
+                else
+                {
+                    Console.WriteLine("Используйте только цифры для ввода цены.");
+                }
+            }
+
+            return isInputFieldFinished;
+        }
+
+        private static bool InputUnit(Expenses expenses)
+        {
+            bool isInputFieldFinished;
+            Console.WriteLine();
+            Console.WriteLine("Введите единицы измерения товара:");
+            isInputFieldFinished = false;
+            while (!isInputFieldFinished)
+            {
+                string inputLine = Console.ReadLine();
+                int userInput = 0;
+                List<Catalog> catalogs = GetList(CatalogType.Unit + ".csv");
+                if (int.TryParse(inputLine, out userInput))
+                {
+                    Catalog catalog = catalogs.FirstOrDefault(x => x.Id == userInput);
+                    if (catalog == null)
+                    {
+                        Console.WriteLine("Eдиницa измерения с данным ID не существует.");
+                    }
+                    else
+                    {
+                        expenses.UnitId = userInput;
+                        isInputFieldFinished = true;
+                    }
+                }
+                else
+                {
+                    Catalog catalog = catalogs.FirstOrDefault(x => inputLine.Length > 0 && x.Name.StartsWith(inputLine));
+                    if (catalog == null)
+                    {
+                        Console.WriteLine("Eдиницa измерения с данным именем не существует.");
+                    }
+                    else
+                    {
+                        expenses.UnitId = catalog.Id;
+                        isInputFieldFinished = true;
                     }
                 }
             }
+
+            return isInputFieldFinished;
+        }
+
+        private static bool InputCategory(Expenses expenses)
+        {
+            bool isInputFieldFinished = false;
+            Console.WriteLine();
+            Console.WriteLine("Введите категорию:");
+            while (!isInputFieldFinished)
+            {
+                string inputLine = Console.ReadLine();
+                int userInput = 0;
+                List<Catalog> catalogs = GetList(CatalogType.GoodsCategory + ".csv");
+                if (int.TryParse(inputLine, out userInput))
+                {
+                    Catalog catalog = catalogs.FirstOrDefault(x => x.Id == userInput);
+                    if (catalog == null)
+                    {
+                        Console.WriteLine("Категория с данным ID не существует.");
+                    }
+                    else
+                    {
+                        expenses.CategoryId = userInput;
+                        isInputFieldFinished = true;
+                    }
+                }
+                else
+                {
+                    Catalog catalog = catalogs.FirstOrDefault(x => inputLine.Length > 0 && x.Name.StartsWith(inputLine));
+                    if (catalog == null)
+                    {
+                        Console.WriteLine("Категория с данным именем не существует.");
+                    }
+                    else
+                    {
+                        expenses.CategoryId = catalog.Id;
+                        isInputFieldFinished = true;
+                    }
+                }
+            }
+
+            return isInputFieldFinished;
+        }
+
+        private static bool InputName(Expenses expenses)
+        {
+            Console.WriteLine();
+            Console.WriteLine("Введите наименование товара:");
+            bool isInputFieldFinished = false;
+            while (!isInputFieldFinished)
+            {
+                string inputLine = Console.ReadLine();
+                int userInput = 0;
+                List<Catalog> catalogs = GetList(CatalogType.Goods + ".csv");
+                if (int.TryParse(inputLine, out userInput))
+                {
+                    Catalog catalog = catalogs.FirstOrDefault(x => x.Id == userInput);
+                    if (catalog == null)
+                    {
+                        Console.WriteLine("Товар с данным ID не существует.");
+                    }
+                    else
+                    {
+                        expenses.GoodsId = userInput;
+                        isInputFieldFinished = true;
+                    }
+                }
+                else
+                {
+                    Catalog catalog = catalogs.FirstOrDefault(x => inputLine.Length > 0 && x.Name.StartsWith(inputLine));
+                    if (catalog == null)
+                    {
+                        Console.WriteLine("Товар с данным именем не существует.");
+                    }
+                    else
+                    {
+                        expenses.GoodsId = catalog.Id;
+                        isInputFieldFinished = true;
+                    }
+                }
+            }
+
+            return isInputFieldFinished;
         }
 
         private static List<Catalog> GetList(string filePath)
@@ -286,6 +333,17 @@ namespace Test_1
                 File.Create(filePath).Close();
             }
             return filePath;
+        }
+        private static void AddExpense(string fileName, Expenses expenses)
+        {
+            string filePath = CreateFile(fileName);
+            int id = GetId(filePath) + 1;
+            string allFields = id.ToString() + Constant.Delimiter + expenses.CategoryId
+                + Constant.Delimiter + expenses.GoodsId + Constant.Delimiter + expenses.UnitId
+                + Constant.Delimiter + expenses.Price
+                + Constant.Delimiter + expenses.Quantity
+                + Constant.Delimiter + expenses.Date + Environment.NewLine; 
+            SaveData(filePath, allFields);
         }
     }
 }

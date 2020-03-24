@@ -6,6 +6,6 @@ namespace Entities
 {
     public class Constant
     {
-        public const string Delimiter = ",";
+        public const string Delimiter = ";";
     }
 }
