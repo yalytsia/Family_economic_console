@@ -1,4 +1,5 @@
 ﻿
+using DataLayer;
 using Entities;
 using System;
 using System.Collections.Generic;
@@ -269,8 +270,8 @@ namespace Test_1
         {
 
             Console.WriteLine("Добавить:");
-            string filePath = CreateFile(fileName);
-            int id = GetId(filePath);
+            string filePath = Data.CreateFile(fileName);
+            int id = Data.GetId(filePath);
             string allLines = ProcessUserInput(id);
             SaveData(filePath, allLines);
         }
@@ -318,32 +319,16 @@ namespace Test_1
             return allLines;
         }
 
-        private static int GetId(string filePath)
-        {
-            string lastLine = File.ReadLines(filePath).LastOrDefault(x => x.Length > 0);
-            int id = lastLine == null ? 0 : int.Parse(lastLine.Split(Constant.Delimiter)[0]);
-            return id;
-        }
-
-        private static string CreateFile(string fileName)
-        {
-            string filePath = fileName + ".csv";
-            if (!File.Exists(filePath))
-            {
-                File.Create(filePath).Close();
-            }
-            return filePath;
-        }
+       
+        
         private static void AddExpense(string fileName, Expenses expenses)
         {
-            string filePath = CreateFile(fileName);
-            int id = GetId(filePath) + 1;
-            string allFields = id.ToString() + Constant.Delimiter + expenses.CategoryId
-                + Constant.Delimiter + expenses.GoodsId + Constant.Delimiter + expenses.UnitId
-                + Constant.Delimiter + expenses.Price
-                + Constant.Delimiter + expenses.Quantity
-                + Constant.Delimiter + expenses.Date + Environment.NewLine; 
+            string filePath = Data.CreateFile(fileName);
+            int id = Data.GetId(filePath) + 1;
+            string allFields = expenses.ToCsv(id);
             SaveData(filePath, allFields);
         }
+
+        
     }
 }
