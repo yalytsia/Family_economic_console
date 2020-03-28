@@ -16,7 +16,10 @@ namespace Test_1
             while (true)
             {
                 Menu menu = new Menu();
+                 
                 int menuItem = menu.AdminMenuI();
+
+
 
                 if (menuItem == 2)
                 {
@@ -36,20 +39,27 @@ namespace Test_1
                     Expenses expenses = new Expenses();
                     bool isInputFinished = false;
                     Console.Clear();
-                   
+
                     while (!isInputFinished)
-                    {                      
+                    {
                         InputCategory(expenses);
                         InputName(expenses);
                         InputUnit(expenses);
                         InputPrice(expenses);
                         InputQuantity(expenses);
-                        InputDate(expenses);                        
+                        InputDate(expenses);
                         isInputFinished = true;
                     }
-                    AddExpense("Expenses", expenses);
+                    AddExpense("Expenses", expenses); 
+                }
+                else if (menuItem == 5)
+                {
+                    
+                    Table();
+                    Console.ReadKey();
                 }
             }
+            
         }
 
         private static bool InputDate(Expenses expenses)
@@ -329,6 +339,48 @@ namespace Test_1
             SaveData(filePath, allFields);
         }
 
-        
+        private static void Table()
+        {
+            List<Expenses> expensesList = GetExpenses();
+                Console.Clear();
+                Console.WriteLine(" ______________________________________________________________________________________________________________________");
+                Console.WriteLine(" |                                                                                                                    |");
+                Console.WriteLine(" |                                             ПОКУПКИ                                                                |");
+                Console.WriteLine(" |____________________________________________________________________________________________________________________|");
+                Console.WriteLine(" |    |                          |                               |           |        |          |                    |");
+                Console.WriteLine(" | ID |        Категория         |         Наименование          | Ед. измер.|  Цена  | Кол-ство |       Дата         |");
+                Console.WriteLine(" |____|__________________________|_______________________________|___________|________|__________|____________________|");
+            for (int i = 0; i < expensesList.Count; i++)
+            {
+                Console.WriteLine(" |    |                          |                               |           |        |          |                    |");
+                Console.WriteLine(" | {0}  |          {1}               |            {2}                  |  {3}        |   {4}   |  {5}       | {6} |", 
+                    expensesList[i].Id, expensesList[i].CategoryId, expensesList[i].GoodsId, expensesList[i].UnitId, expensesList[i].Price, expensesList[i].Quantity, expensesList[i].Date);
+                Console.WriteLine(" |____|__________________________|_______________________________|___________|________|__________|____________________|");
+            }
+        }
+        private static List<Expenses> GetExpenses()
+        {
+            List<Expenses> expensesList = new List<Expenses>();
+            using (var reader = new StreamReader("Expenses.csv"))
+            {
+
+                while (!reader.EndOfStream)
+                {
+                    string line = reader.ReadLine();
+                    string[] values = line.Split(Constant.Delimiter);
+                    Expenses expense = new Expenses();
+                    expense.Id = int.Parse(values[0]);
+                    expense.CategoryId = int.Parse(values[1]);
+                    expense.GoodsId = int.Parse(values[2]);
+                    expense.UnitId = int.Parse(values[3]);
+                    expense.Price = decimal.Parse(values[4]);
+                    expense.Quantity = float.Parse(values[5]);
+                    expense.Date = DateTime.Parse(values[6]);
+                    expensesList.Add(expense);
+                }
+            }
+            return expensesList;
+        }
     }
+
 }
