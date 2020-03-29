@@ -342,20 +342,32 @@ namespace Test_1
         private static void Table()
         {
             List<Expenses> expensesList = GetExpenses();
+            List<Catalog> categories = GetList(CatalogType.GoodsCategory + ".csv");
+            List<Catalog> goods = GetList(CatalogType.Goods + ".csv");
+            List<Catalog> units = GetList(CatalogType.Unit + ".csv");
+            
+           
+
                 Console.Clear();
-                Console.WriteLine(" ______________________________________________________________________________________________________________________");
+                Console.WriteLine(" .____________________________________________________________________________________________________________________.");
                 Console.WriteLine(" |                                                                                                                    |");
-                Console.WriteLine(" |                                             ПОКУПКИ                                                                |");
+                Console.WriteLine(" |                                                 ПОКУПКИ                                                            |");
                 Console.WriteLine(" |____________________________________________________________________________________________________________________|");
-                Console.WriteLine(" |    |                          |                               |           |        |          |                    |");
-                Console.WriteLine(" | ID |        Категория         |         Наименование          | Ед. измер.|  Цена  | Кол-ство |       Дата         |");
-                Console.WriteLine(" |____|__________________________|_______________________________|___________|________|__________|____________________|");
+                Console.WriteLine(" |     |                     |                               |                    |            |   Кол-  |            |");
+                Console.WriteLine(" | ID  |      Категория      |         Наименование          |     Ед. измер.     |    Цена    |   ство  |    Дата    |");
+                Console.WriteLine(" |_____|_____________________|_______________________________|____________________|____________|_________|____________|");
             for (int i = 0; i < expensesList.Count; i++)
             {
-                Console.WriteLine(" |    |                          |                               |           |        |          |                    |");
-                Console.WriteLine(" | {0}  |          {1}               |            {2}                  |  {3}        |   {4}   |  {5}       | {6} |", 
-                    expensesList[i].Id, expensesList[i].CategoryId, expensesList[i].GoodsId, expensesList[i].UnitId, expensesList[i].Price, expensesList[i].Quantity, expensesList[i].Date);
-                Console.WriteLine(" |____|__________________________|_______________________________|___________|________|__________|____________________|");
+                Console.WriteLine(" |     |                     |                               |                    |            |         |            |"); 
+                Console.WriteLine(" | {0}| {1}| {2}| {3}| {4}| {5}| {6} |",
+                    expensesList[i].Id + new string(' ', 4 - expensesList[i].Id.ToString().Length),
+                    categories.FirstOrDefault(x => x.Id == expensesList[i].CategoryId).Name + new string(' ', 20 - categories.FirstOrDefault(x => x.Id == expensesList[i].CategoryId).Name.Length),
+                    goods.FirstOrDefault(x => x.Id == expensesList[i].GoodsId).Name + new string(' ', 30 - goods.FirstOrDefault(x => x.Id == expensesList[i].GoodsId).Name.Length),
+                    units.FirstOrDefault(x => x.Id == expensesList[i].UnitId).Name + new string(' ', 19 - units.FirstOrDefault(x => x.Id == expensesList[i].UnitId).Name.Length), 
+                    expensesList[i].Price + new string(' ', 11 - expensesList[i].Price.ToString().Length), 
+                    expensesList[i].Quantity + new string(' ', 8 - expensesList[i].Quantity.ToString().Length), 
+                    expensesList[i].Date.ToShortDateString());
+                Console.WriteLine(" |_____|_____________________|_______________________________|____________________|____________|_________|____________|");
             }
         }
         private static List<Expenses> GetExpenses()
