@@ -64,6 +64,35 @@ namespace Entities
 
 			return UserMenuChoose;
 		}
+		public int ViewRecordMenu()
+		{
+			Console.Clear();
+			Console.WriteLine("\n Просмотр списка:\n");
+			Console.WriteLine("1. Товары");
+			Console.WriteLine("2. Категории товаров");
+			Console.WriteLine("3. Единицы измерения");
+			Console.WriteLine("4. Покупки");
+			Console.WriteLine("0. Выход в предыдущее меню");
+
+			ConsoleKeyInfo userChoose = Console.ReadKey();
+
+			if (char.IsDigit(userChoose.KeyChar))
+			{
+				UserMenuChoose = int.Parse(userChoose.KeyChar.ToString());
+				if (UserMenuChoose < 0 || UserMenuChoose > 4)
+				{
+					ErrorMessage();
+
+				}
+				return UserMenuChoose;
+			}
+			else
+			{
+				ErrorMessage();
+			}
+
+			return UserMenuChoose;
+		}
 		private void ErrorMessage()
 		{
 			Console.Clear();

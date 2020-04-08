@@ -54,9 +54,23 @@ namespace Test_1
                 }
                 else if (menuItem == 5)
                 {
+                    int viewRecordMenu = menu.ViewRecordMenu();
+                    if (viewRecordMenu >= 1 && viewRecordMenu <= 4)
+                    {
+                        CatalogType catalogies = (CatalogType)viewRecordMenu;
+                        if (viewRecordMenu == 4)
+                        {
+
+                            TableExpenses();
+                        }
+                        else 
+                        {
+                            CatalogType catalog = (CatalogType)viewRecordMenu;
+                            TableCatalogs(catalog);                        
+                        }
+                        Console.ReadKey();
+                    }
                     
-                    Table();
-                    Console.ReadKey();
                 }
             }
             
@@ -339,7 +353,7 @@ namespace Test_1
             SaveData(filePath, allFields);
         }
 
-        private static void Table()
+        private static void TableExpenses()
         {
             List<Expenses> expensesList = GetExpenses();
             List<Catalog> categories = GetList(CatalogType.GoodsCategory + ".csv");
@@ -368,6 +382,29 @@ namespace Test_1
                     expensesList[i].Quantity + new string(' ', 8 - expensesList[i].Quantity.ToString().Length), 
                     expensesList[i].Date.ToShortDateString());
                 Console.WriteLine(" |_____|_____________________|_______________________________|____________________|____________|_________|____________|");
+            }
+        }
+        private static void TableCatalogs(CatalogType catalogType)
+        {
+            List<Catalog> catalog = GetList(catalogType + ".csv");
+           
+            Console.Clear();
+            Console.WriteLine(" .____________________________________________________________________________________________________________________.");
+            Console.WriteLine(" |                                                                                                                    |");
+            Console.WriteLine(" |                  {0}  |", catalogType + new string(' ', 96 - catalogType.ToString().Length));
+            Console.WriteLine(" |____________________________________________________________________________________________________________________|");
+            Console.WriteLine(" |       |                                                                                                            |");
+            Console.WriteLine(" | ID    |     Наименование                                                                                           |");
+            Console.WriteLine(" |_______|____________________________________________________________________________________________________________|");
+            for (int i = 0; i < catalog.Count; i++)
+            {
+                Console.WriteLine(" |       |                                                                                                            |");
+                Console.WriteLine(" | {0} |   {1} |",
+                    catalog[i].Id + new string(' ', 5 - catalog[i].Id.ToString().Length),
+                    catalog[i].Name + new string(' ', 104 - catalog[i].Name.Length));
+                    
+
+                    Console.WriteLine(" |_______|____________________________________________________________________________________________________________|");
             }
         }
         private static List<Expenses> GetExpenses()
