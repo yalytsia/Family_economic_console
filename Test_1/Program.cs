@@ -11,6 +11,8 @@ namespace Test_1
 {
     class Program
     {
+        static int pageCounter = 1;
+        static int pageSize = 3;
         static void Main(string[] args)
         {
             while (true)
@@ -58,15 +60,75 @@ namespace Test_1
                     if (viewRecordMenu >= 1 && viewRecordMenu <= 4)
                     {
                         CatalogType catalogies = (CatalogType)viewRecordMenu;
+                        ConsoleKeyInfo userChoose = Console.ReadKey();
+                        
                         if (viewRecordMenu == 4)
                         {
+                            TableExpenses(((pageCounter - 1) * pageSize), pageCounter * pageSize);
+                            
+                            int maxId = Data.GetId("Expenses.csv");
 
-                            TableExpenses();
+                            while (userChoose.Key != ConsoleKey.Escape)
+                            {
+                                
+                                TableExpenses(((pageCounter - 1) * pageSize), pageCounter * pageSize);
+
+                                if (userChoose.Key == ConsoleKey.PageDown ||
+                                    userChoose.Key == ConsoleKey.DownArrow ||
+                                    userChoose.Key == ConsoleKey.RightArrow)
+                                {
+                                    if (pageCounter * pageSize <= maxId)
+                                    {
+                                        pageCounter = pageCounter + 1;
+                                    }
+                                }
+                                if (userChoose.Key == ConsoleKey.PageUp ||
+                                    userChoose.Key == ConsoleKey.UpArrow ||
+                                    userChoose.Key == ConsoleKey.LeftArrow)
+                                {
+
+                                    if (pageCounter > 1)
+                                    {
+                                        pageCounter = pageCounter - 1;
+                                    }
+                                }
+                                userChoose = Console.ReadKey();
+                            }
                         }
-                        else 
+
+                        else
                         {
+                            
                             CatalogType catalog = (CatalogType)viewRecordMenu;
-                            TableCatalogs(catalog);                        
+                            TableCatalogs(catalog, ((pageCounter - 1) * pageSize), pageCounter * pageSize);
+                            int maxId = Data.GetId(catalog + ".csv");
+                            while (userChoose.Key != ConsoleKey.Escape)
+                            {                                  
+                                TableCatalogs(catalog, ((pageCounter - 1) * pageSize), pageCounter * pageSize);
+
+
+                                if (userChoose.Key == ConsoleKey.PageDown ||
+                                    userChoose.Key == ConsoleKey.DownArrow ||
+                                    userChoose.Key == ConsoleKey.RightArrow)
+                                {
+                                    if (pageCounter * pageSize <= maxId)
+                                    {
+                                        pageCounter = pageCounter + 1;
+                                    }
+                                }
+                                if (userChoose.Key == ConsoleKey.PageUp ||
+                                    userChoose.Key == ConsoleKey.UpArrow ||
+                                    userChoose.Key == ConsoleKey.LeftArrow)
+                                {
+
+                                    if (pageCounter > 1)
+                                    {
+                                        pageCounter = pageCounter - 1;
+                                    }
+                                }
+                            userChoose = Console.ReadKey();
+                            }
+                
                         }
                         Console.ReadKey();
                     }
@@ -353,9 +415,9 @@ namespace Test_1
             SaveData(filePath, allFields);
         }
 
-        private static void TableExpenses()
+        private static void TableExpenses(int from, int to)
         {
-            List<Expenses> expensesList = GetExpenses();
+            List<Expenses> expensesList = GetExpenses().Where(x=>x.Id>from && x.Id<=to).ToList();
             List<Catalog> categories = GetList(CatalogType.GoodsCategory + ".csv");
             List<Catalog> goods = GetList(CatalogType.Goods + ".csv");
             List<Catalog> units = GetList(CatalogType.Unit + ".csv");
@@ -384,7 +446,7 @@ namespace Test_1
                 Console.WriteLine(" |_____|_____________________|_______________________________|____________________|____________|_________|____________|");
             }
         }
-        private static void TableCatalogs(CatalogType catalogType)
+        private static void TableCatalogs(CatalogType catalogType, int from, int to)
         {
             List<Catalog> catalog = GetList(catalogType + ".csv");
            
