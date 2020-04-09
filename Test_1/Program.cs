@@ -12,7 +12,7 @@ namespace Test_1
     class Program
     {
         static int pageCounter = 1;
-        static int pageSize = 3;
+        static int pageSize = 2;
         static void Main(string[] args)
         {
             while (true)
@@ -448,7 +448,7 @@ namespace Test_1
         }
         private static void TableCatalogs(CatalogType catalogType, int from, int to)
         {
-            List<Catalog> catalog = GetList(catalogType + ".csv");
+            List<Catalog> catalog = GetList(catalogType + ".csv").Where(x => x.Id > from && x.Id <= to).ToList();
            
             Console.Clear();
             Console.WriteLine(" .____________________________________________________________________________________________________________________.");
