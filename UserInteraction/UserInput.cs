@@ -90,13 +90,15 @@ namespace UserInteraction
             {
                 string inputLine = Console.ReadLine();
                 int userInput = 0;
-                List<Catalog> catalogs = Data.GetList(CatalogType.Unit + ".csv");
+                string filePath = CatalogType.Unit + ".csv";
+                List<Catalog> catalogs = Data.GetList(filePath);
                 if (int.TryParse(inputLine, out userInput))
                 {
                     Catalog catalog = catalogs.FirstOrDefault(x => x.Id == userInput);
                     if (catalog == null)
                     {
                         Console.WriteLine("Eдиницa измерения с данным ID не существует.");
+
                     }
                     else
                     {
@@ -109,7 +111,16 @@ namespace UserInteraction
                     Catalog catalog = catalogs.FirstOrDefault(x => inputLine.Length > 0 && x.Name.StartsWith(inputLine));
                     if (catalog == null)
                     {
-                        Console.WriteLine("Eдиницa измерения с данным именем не существует.");
+                        Console.WriteLine("Eдиницa измерения с данным именем не существует. Добавить?");
+                        Menu menu = new Menu();
+                        int toAdd = menu.AskAddRecord();
+                        if (toAdd == 1)
+                        {
+                            AddRecord(inputLine, filePath, catalogs);
+                            isInputFieldFinished = true;
+                        }
+
+
                     }
                     else
                     {
@@ -122,6 +133,13 @@ namespace UserInteraction
             return isInputFieldFinished;
         }
 
+        private static void AddRecord(string inputLine, string filePath, List<Catalog> catalogs)
+        {
+            int id = catalogs.LastOrDefault().Id + 1;
+            string allLines = Environment.NewLine + id.ToString() + Constant.Delimiter + inputLine;
+            Data.SaveData(filePath, allLines);
+        }
+
         public static bool InputCategory(Expenses expenses)
         {
             bool isInputFieldFinished = false;
@@ -131,7 +149,8 @@ namespace UserInteraction
             {
                 string inputLine = Console.ReadLine();
                 int userInput = 0;
-                List<Catalog> catalogs = Data.GetList(CatalogType.GoodsCategory + ".csv");
+                string filePath = CatalogType.GoodsCategory + ".csv";
+                List<Catalog> catalogs = Data.GetList(filePath);
                 if (int.TryParse(inputLine, out userInput))
                 {
                     Catalog catalog = catalogs.FirstOrDefault(x => x.Id == userInput);
@@ -150,7 +169,14 @@ namespace UserInteraction
                     Catalog catalog = catalogs.FirstOrDefault(x => inputLine.Length > 0 && x.Name.StartsWith(inputLine));
                     if (catalog == null)
                     {
-                        Console.WriteLine("Категория с данным именем не существует.");
+                        Console.WriteLine("Категория с данным именем не существует. Добавить?");
+                        Menu menu = new Menu();
+                        int toAdd = menu.AskAddRecord();
+                        if (toAdd == 1)
+                        {
+                            AddRecord(inputLine, filePath, catalogs);
+                            isInputFieldFinished = true;
+                        }
                     }
                     else
                     {
@@ -172,7 +198,8 @@ namespace UserInteraction
             {
                 string inputLine = Console.ReadLine();
                 int userInput = 0;
-                List<Catalog> catalogs = Data.GetList(CatalogType.Goods + ".csv");
+                string filePath = CatalogType.Goods + ".csv";
+                List<Catalog> catalogs = Data.GetList(filePath);
                 if (int.TryParse(inputLine, out userInput))
                 {
                     Catalog catalog = catalogs.FirstOrDefault(x => x.Id == userInput);
@@ -191,7 +218,14 @@ namespace UserInteraction
                     Catalog catalog = catalogs.FirstOrDefault(x => inputLine.Length > 0 && x.Name.StartsWith(inputLine));
                     if (catalog == null)
                     {
-                        Console.WriteLine("Товар с данным именем не существует.");
+                        Console.WriteLine("Товар с данным именем не существует. Добавить?");
+                        Menu menu = new Menu();
+                        int toAdd = menu.AskAddRecord();
+                        if (toAdd == 1)
+                        {
+                            AddRecord(inputLine, filePath, catalogs);
+                            isInputFieldFinished = true;
+                        }
                     }
                     else
                     {
@@ -224,6 +258,15 @@ namespace UserInteraction
             } while (inputLine != String.Empty);
             allLines = allLines.TrimEnd(Environment.NewLine.ToCharArray());
             return allLines;
+        }
+        public static void AddRecord(int menuCatalog)
+        {
+            Console.WriteLine("Добавить:");
+            CatalogType catalogies = (CatalogType)menuCatalog;
+            string filePath = Data.CreateFile(catalogies.ToString());
+            int id = Data.GetMaxId(filePath);
+            string allLines = UserInput.ProcessUserInput(id);
+            Data.SaveData(filePath, allLines);
         }
     }
 }

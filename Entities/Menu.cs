@@ -24,14 +24,14 @@ namespace Entities
 				UserMenuChoose = int.Parse(userChoose.KeyChar.ToString());
 				if (UserMenuChoose < 0 || UserMenuChoose > 8)
 				{
-					ErrorMessage();
+					ErrorMessage(0, 8);
 
 				}
 				return UserMenuChoose;
 			}
 			else
 			{
-				ErrorMessage();
+				ErrorMessage(0, 8);
 			}
 
 			return UserMenuChoose;
@@ -52,14 +52,14 @@ namespace Entities
 				UserMenuChoose = int.Parse(userChoose.KeyChar.ToString());
 				if (UserMenuChoose < 0 || UserMenuChoose > 3)
 				{
-					ErrorMessage();
+					ErrorMessage(0, 3);
 
 				}
 				return UserMenuChoose;
 			}
 			else
 			{
-				ErrorMessage();
+				ErrorMessage(0, 3);
 			}
 
 			return UserMenuChoose;
@@ -81,23 +81,46 @@ namespace Entities
 				UserMenuChoose = int.Parse(userChoose.KeyChar.ToString());
 				if (UserMenuChoose < 0 || UserMenuChoose > 4)
 				{
-					ErrorMessage();
+					ErrorMessage(0, 4);
 
 				}
 				return UserMenuChoose;
 			}
 			else
 			{
-				ErrorMessage();
+				ErrorMessage(0, 4);
 			}
 
 			return UserMenuChoose;
 		}
-		private void ErrorMessage()
+		private void ErrorMessage(int from, int to)
 		{
 			Console.Clear();
-			Console.WriteLine("Выберите число от 0 до 8.");
+			Console.WriteLine($"Выберите число от {from} до {to}.");
 			AdminMenuI();
 		}
+		public int AskAddRecord()
+		{
+		
+			Console.WriteLine("1. Да, добавить запись в справочник и покупуку.");
+			Console.WriteLine("2. Нет.");
+			ConsoleKeyInfo userChoose = Console.ReadKey();
+			if (char.IsDigit(userChoose.KeyChar))
+			{
+				UserMenuChoose = int.Parse(userChoose.KeyChar.ToString());
+				if (UserMenuChoose < 1 || UserMenuChoose > 2)
+				{
+					ErrorMessage(1, 2);
+
+				}
+				return UserMenuChoose;
+			}
+			else
+			{
+				ErrorMessage(1, 2);
+			}
+			return UserMenuChoose;
+		}
+
 	}
 }

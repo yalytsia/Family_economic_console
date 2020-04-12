@@ -29,12 +29,7 @@ namespace Test_1
                     int menuCatalog = menu.СatalogsMenu();
                     if (menuCatalog >= 1 && menuCatalog <= 3)
                     {
-                        Console.WriteLine("Добавить:");
-                        CatalogType catalogies = (CatalogType)menuCatalog;
-                        string filePath = Data.CreateFile(catalogies.ToString());
-                        int id = Data.GetId(filePath);
-                        string allLines = UserInput.ProcessUserInput(id);
-                        Data.SaveData(filePath, allLines);                      
+                        UserInput.AddRecord(menuCatalog);
                     }
                 }
                 else if (menuItem == 0)
@@ -71,7 +66,7 @@ namespace Test_1
                         {
                             UserOutput.TableExpenses(((pageCounter - 1) * pageSize), pageCounter * pageSize);
                             
-                            int maxId = Data.GetId("Expenses.csv");
+                            int maxId = Data.GetMaxId("Expenses.csv");
 
                             while (userChoose.Key != ConsoleKey.Escape)
                             {
@@ -106,7 +101,7 @@ namespace Test_1
                             
                             CatalogType catalog = (CatalogType)viewRecordMenu;
                             UserOutput.TableCatalogs(catalog, ((pageCounter - 1) * pageSize), pageCounter * pageSize);
-                            int maxId = Data.GetId(catalog + ".csv");
+                            int maxId = Data.GetMaxId(catalog + ".csv");
                             while (userChoose.Key != ConsoleKey.Escape)
                             {
                                 UserOutput.TableCatalogs(catalog, ((pageCounter - 1) * pageSize), pageCounter * pageSize);
@@ -143,17 +138,18 @@ namespace Test_1
             
         }
 
-      
-
         
 
-        
 
-        
-        
 
-        
-        
+
+
+
+
+
+
+
+
     }
 
 }

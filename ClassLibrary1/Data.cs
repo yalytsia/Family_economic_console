@@ -9,7 +9,7 @@ namespace DataLayer
 {
     public class Data
     {
-        public static int GetId(string filePath)
+        public static int GetMaxId(string filePath)
         {
             string lastLine = File.ReadLines(filePath).LastOrDefault(x => x.Length > 0);
             int id = lastLine == null ? 0 : int.Parse(lastLine.Split(Constant.Delimiter)[0]);
@@ -46,7 +46,7 @@ namespace DataLayer
         public static void AddExpense(string fileName, Expenses expenses)
         {
             string filePath = CreateFile(fileName);
-            int id = GetId(filePath) + 1;
+            int id = GetMaxId(filePath) + 1;
             string allFields = expenses.ToCsv(id);
             SaveData(filePath, allFields);
         }
