@@ -13,13 +13,18 @@ namespace UserInteraction
         {
             bool isInputFieldFinished;
             Console.WriteLine();
-            Console.WriteLine("Введите дату покупки:");
+            Console.WriteLine("Введите дату покупки (Enter - текущая дата):");
             isInputFieldFinished = false;
             while (!isInputFieldFinished)
             {
                 string inputLine = Console.ReadLine();
                 DateTime userInput;
-                if (DateTime.TryParse(inputLine, out userInput))
+                if (inputLine == string.Empty) 
+                {
+                    expenses.Date = DateTime.Today;
+                    isInputFieldFinished = true;
+                }
+                else if (DateTime.TryParse(inputLine, out userInput))
                 {
                     expenses.Date = userInput;
                     isInputFieldFinished = true;
