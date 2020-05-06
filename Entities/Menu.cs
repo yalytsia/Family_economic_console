@@ -22,16 +22,19 @@ namespace Entities
 			if (char.IsDigit(userChoose.KeyChar))
 			{
 				UserMenuChoose = int.Parse(userChoose.KeyChar.ToString());
-				if (UserMenuChoose < 0 || UserMenuChoose > 8)
+				if (UserMenuChoose < 0 || UserMenuChoose > 6)
 				{
-					ErrorMessage(0, 8);
-
+					Console.Clear();
+					ErrorMessage(0, 6);
+					AdminMenuI();
 				}
 				return UserMenuChoose;
 			}
 			else
 			{
-				ErrorMessage(0, 8);
+				Console.Clear();
+				ErrorMessage(0, 6);
+				AdminMenuI();
 			}
 
 			return UserMenuChoose;
@@ -95,9 +98,9 @@ namespace Entities
 		}
 		private void ErrorMessage(int from, int to)
 		{
-			Console.Clear();
+			//Console.Clear();
 			Console.WriteLine($"Выберите число от {from} до {to}.");
-			AdminMenuI();
+
 		}
 		public int AskAddRecord()
 		{

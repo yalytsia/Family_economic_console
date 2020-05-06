@@ -13,7 +13,7 @@ namespace Test_1
     class Program
     {
         static int pageCounter = 1;
-        static int pageSize = 2;
+        static int pageSize = 7;
         static void Main(string[] args)
         {
             while (true)

@@ -94,6 +94,10 @@ namespace UserInteraction
             while (!isInputFieldFinished)
             {
                 string inputLine = Console.ReadLine();
+                if (inputLine.Length == 0)
+                {
+                    continue;
+                }
                 int userInput = 0;
                 string filePath = CatalogType.Unit + ".csv";
                 List<Catalog> catalogs = Data.GetList(filePath);
@@ -113,7 +117,7 @@ namespace UserInteraction
                 }
                 else
                 {
-                    Catalog catalog = catalogs.FirstOrDefault(x => inputLine.Length > 0 && x.Name.StartsWith(inputLine));
+                    Catalog catalog = catalogs.FirstOrDefault(x => inputLine.Length > 0 && x.Name.ToLower().StartsWith(inputLine.ToLower()));
                     if (catalog == null)
                     {
                         Console.WriteLine("Eдиницa измерения с данным именем не существует. Добавить?");
@@ -124,7 +128,12 @@ namespace UserInteraction
                             AddRecord(inputLine, filePath, catalogs);
                             isInputFieldFinished = true;
                         }
+                        else if (toAdd == 2)
+                        {
+                            InputUnit(expenses);
 
+                            isInputFieldFinished = true;
+                        }
 
                     }
                     else
@@ -153,6 +162,10 @@ namespace UserInteraction
             while (!isInputFieldFinished)
             {
                 string inputLine = Console.ReadLine();
+                if (inputLine.Length == 0)
+                {
+                    continue;
+                }
                 int userInput = 0;
                 string filePath = CatalogType.GoodsCategory + ".csv";
                 List<Catalog> catalogs = Data.GetList(filePath);
@@ -171,8 +184,8 @@ namespace UserInteraction
                 }
                 else
                 {
-                    Catalog catalog = catalogs.FirstOrDefault(x => inputLine.Length > 0 && x.Name.StartsWith(inputLine));
-                    if (catalog == null)
+                    Catalog catalog = catalogs.FirstOrDefault(x => inputLine.Length > 0 && x.Name.ToLower().StartsWith(inputLine.ToLower()));
+                    if (catalog == null )
                     {
                         Console.WriteLine("Категория с данным именем не существует. Добавить?");
                         Menu menu = new Menu();
@@ -181,6 +194,12 @@ namespace UserInteraction
                         {
                             AddRecord(inputLine, filePath, catalogs);
                             isInputFieldFinished = true;
+                        }
+                        else if (toAdd == 2)
+                        {
+                            InputCategory(expenses);
+
+                            isInputFieldFinished = true; 
                         }
                     }
                     else
@@ -202,6 +221,11 @@ namespace UserInteraction
             while (!isInputFieldFinished)
             {
                 string inputLine = Console.ReadLine();
+                if (inputLine.Length == 0)
+                {
+                    continue;
+                }
+
                 int userInput = 0;
                 string filePath = CatalogType.Goods + ".csv";
                 List<Catalog> catalogs = Data.GetList(filePath);
@@ -220,7 +244,7 @@ namespace UserInteraction
                 }
                 else
                 {
-                    Catalog catalog = catalogs.FirstOrDefault(x => inputLine.Length > 0 && x.Name.StartsWith(inputLine));
+                    Catalog catalog = catalogs.FirstOrDefault(x => inputLine.Length > 0 && x.Name.ToLower().StartsWith(inputLine.ToLower()));
                     if (catalog == null)
                     {
                         Console.WriteLine("Товар с данным именем не существует. Добавить?");
@@ -229,6 +253,12 @@ namespace UserInteraction
                         if (toAdd == 1)
                         {
                             AddRecord(inputLine, filePath, catalogs);
+                            isInputFieldFinished = true;
+                        }
+                        else if (toAdd == 2)
+                        {
+                            InputName(expenses);
+
                             isInputFieldFinished = true;
                         }
                     }
@@ -242,22 +272,30 @@ namespace UserInteraction
 
             return isInputFieldFinished;
         }
-        public static string ProcessUserInput(int id)
+        public static string ProcessUserInput(int id, CatalogType catalogies)
         {
             string allLines = String.Empty;
             string inputLine;
             int counter = 0;
+            List<Catalog> catalogList = Data.GetList(catalogies + ".csv");
             do
             {
+
                 inputLine = Console.ReadLine();
-                if (inputLine != String.Empty)
+
+                if (inputLine != String.Empty && !int.TryParse(inputLine, out _))
                 {
                     id++;
                     if (counter == 0 && id > 1)
                     {
                         allLines = Environment.NewLine;
                     }
-                    allLines = allLines + id.ToString() + Constant.Delimiter + inputLine + Environment.NewLine;
+                    string[] lines = allLines.Split(Environment.NewLine);
+                    if (catalogList.FirstOrDefault(x => x.Name.ToLower() == inputLine.ToLower()) == null &&
+                        lines.FirstOrDefault(x => x.ToLower() == inputLine.ToLower()) == null)
+                    { 
+                        allLines = allLines + id.ToString() + Constant.Delimiter + inputLine + Environment.NewLine;
+                    }
                 }
                 counter++;
             } while (inputLine != String.Empty);
@@ -270,7 +308,7 @@ namespace UserInteraction
             CatalogType catalogies = (CatalogType)menuCatalog;
             string filePath = Data.CreateFile(catalogies.ToString());
             int id = Data.GetMaxId(filePath);
-            string allLines = UserInput.ProcessUserInput(id);
+            string allLines = UserInput.ProcessUserInput(id, catalogies);
             Data.SaveData(filePath, allLines);
         }
     }
