@@ -11,6 +11,7 @@ namespace DataLayer
     {
         public static int GetMaxId(string filePath)
         {
+            
             string lastLine = File.ReadLines(filePath).LastOrDefault(x => x.Length > 0);
             int id = lastLine == null ? 0 : int.Parse(lastLine.Split(Constant.Delimiter)[0]);
             return id;
@@ -38,6 +39,19 @@ namespace DataLayer
                 ms.Write(csvLineBytes, 0, csvLineBytes.Length);
 
                 using (FileStream file = new FileStream(filePath, FileMode.Open, FileAccess.Write))
+                {
+                    ms.WriteTo(file);
+                }
+            }
+        }
+        public static void SaveAllData(string filePath, string allLines)
+        {
+            byte[] csvLineBytes = Encoding.Default.GetBytes(allLines);
+            using (MemoryStream ms = new MemoryStream())
+            {
+                ms.Write(csvLineBytes, 0, csvLineBytes.Length);
+
+                using (FileStream file = new FileStream(filePath, FileMode.Truncate))
                 {
                     ms.WriteTo(file);
                 }

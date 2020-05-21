@@ -19,7 +19,7 @@ namespace UserInteraction
             {
                 string inputLine = Console.ReadLine();
                 DateTime userInput;
-                if (inputLine == string.Empty) 
+                if (inputLine == string.Empty)
                 {
                     expenses.Date = DateTime.Today;
                     isInputFieldFinished = true;
@@ -185,7 +185,7 @@ namespace UserInteraction
                 else
                 {
                     Catalog catalog = catalogs.FirstOrDefault(x => inputLine.Length > 0 && x.Name.ToLower().StartsWith(inputLine.ToLower()));
-                    if (catalog == null )
+                    if (catalog == null)
                     {
                         Console.WriteLine("Категория с данным именем не существует. Добавить?");
                         Menu menu = new Menu();
@@ -199,7 +199,7 @@ namespace UserInteraction
                         {
                             InputCategory(expenses);
 
-                            isInputFieldFinished = true; 
+                            isInputFieldFinished = true;
                         }
                     }
                     else
@@ -293,7 +293,7 @@ namespace UserInteraction
                     string[] lines = allLines.Split(Environment.NewLine);
                     if (catalogList.FirstOrDefault(x => x.Name.ToLower() == inputLine.ToLower()) == null &&
                         lines.FirstOrDefault(x => x.ToLower() == inputLine.ToLower()) == null)
-                    { 
+                    {
                         allLines = allLines + id.ToString() + Constant.Delimiter + inputLine + Environment.NewLine;
                     }
                 }
@@ -310,6 +310,66 @@ namespace UserInteraction
             int id = Data.GetMaxId(filePath);
             string allLines = UserInput.ProcessUserInput(id, catalogies);
             Data.SaveData(filePath, allLines);
+        }
+        public static void DeleteRecord(int menuCatalog)
+        {
+            Console.WriteLine("Введите ID удаляемой записи:");
+            bool isInputFieldFinished = false;
+            CatalogType catalogies = (CatalogType)menuCatalog;
+            while (!isInputFieldFinished)
+            {
+                string inputLine = Console.ReadLine();
+                if (inputLine.Length == 0)
+                {
+                    continue;
+                }
+                int userInput = 0;
+                string filePath = catalogies + ".csv";
+                List<Catalog> catalogs = Data.GetList(filePath);
+                if (int.TryParse(inputLine, out userInput))
+                {
+                    Catalog catalog = catalogs.FirstOrDefault(x => x.Id == userInput);
+                    if (catalog == null)
+                    {
+                        Console.WriteLine("Запись с данным ID не существует.");
+                    }
+                    else
+                    {
+                        Expenses expenses = null;
+                        if (catalogies == CatalogType.GoodsCategory)
+                        {
+                             expenses = Data.GetExpenses().FirstOrDefault(x => x.CategoryId == userInput);
+                        }
+                        else if (catalogies == CatalogType.Goods)
+                        {
+                             expenses = Data.GetExpenses().FirstOrDefault(x => x.GoodsId == userInput);
+                        }
+                        else if (catalogies == CatalogType.Unit)
+                        {
+                             expenses = Data.GetExpenses().FirstOrDefault(x => x.UnitId == userInput);
+                        }
+
+                        if (expenses != null)
+                        {
+                            Console.WriteLine("Запись с данным ID используется в покупках. Не может быть удалена.");
+                        }
+                        else
+                        {
+                            catalogs.Remove(catalog);
+                            string lines = Catalog.ListToCsv(catalogs);
+                            Data.SaveAllData(filePath, lines);
+                            isInputFieldFinished = true;
+                        }
+
+                        
+                    }
+                }
+
+            }
+        }
+        public static void DeletePurchase()
+        {
+            Console.WriteLine("Введите ID удаляемой покупки:");
         }
     }
 }

@@ -16,6 +16,7 @@ namespace Test_1
         static int pageSize = 7;
         static void Main(string[] args)
         {
+          
             while (true)
             {
                 Menu menu = new Menu();
@@ -23,16 +24,7 @@ namespace Test_1
                 int menuItem = menu.AdminMenuI();
 
 
-
-                if (menuItem == 2)
-                {
-                    int menuCatalog = menu.СatalogsMenu();
-                    if (menuCatalog >= 1 && menuCatalog <= 3)
-                    {
-                        UserInput.AddRecord(menuCatalog);
-                    }
-                }
-                else if (menuItem == 0)
+                if (menuItem == 0)
                 {
                     Environment.Exit(0);
                 }
@@ -52,20 +44,40 @@ namespace Test_1
                         UserInput.InputDate(expenses);
                         isInputFinished = true;
                     }
-                    Data.AddExpense("Expenses", expenses); 
+                    Data.AddExpense("Expenses", expenses);
                 }
-                else if (menuItem == 5)
+                else if (menuItem == 2)
+                {
+                    int menuCatalog = menu.СatalogsMenu();
+                    if (menuCatalog >= 1 && menuCatalog <= 3)
+                    {
+                        UserInput.AddRecord(menuCatalog);
+                    }
+                }
+                else if (menuItem == 3)
+                {
+                    int deleteMenu = menu.DeleteMenu();
+                    if (deleteMenu >= 1 && deleteMenu <= 3)
+                    {
+                        UserInput.DeleteRecord(deleteMenu);
+                    }
+                    else if (deleteMenu == 4)
+                    { 
+                        
+                    }
+                }
+                else if (menuItem == 4)
                 {
                     int viewRecordMenu = menu.ViewRecordMenu();
                     if (viewRecordMenu >= 1 && viewRecordMenu <= 4)
                     {
                         CatalogType catalogies = (CatalogType)viewRecordMenu;
                         ConsoleKeyInfo userChoose = Console.ReadKey();
-                        
+
                         if (viewRecordMenu == 4)
                         {
                             UserOutput.TableExpenses(((pageCounter - 1) * pageSize), pageCounter * pageSize);
-                            
+
                             int maxId = Data.GetMaxId("Expenses.csv");
 
                             while (userChoose.Key != ConsoleKey.Escape)
@@ -98,7 +110,7 @@ namespace Test_1
 
                         else
                         {
-                            
+
                             CatalogType catalog = (CatalogType)viewRecordMenu;
                             UserOutput.TableCatalogs(catalog, ((pageCounter - 1) * pageSize), pageCounter * pageSize);
                             int maxId = Data.GetMaxId(catalog + ".csv");
@@ -126,13 +138,13 @@ namespace Test_1
                                         pageCounter = pageCounter - 1;
                                     }
                                 }
-                            userChoose = Console.ReadKey();
+                                userChoose = Console.ReadKey();
                             }
-                
+
                         }
                         Console.ReadKey();
                     }
-                    
+
                 }
             }
             
