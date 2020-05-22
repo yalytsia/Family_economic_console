@@ -13,6 +13,7 @@ Application consists of the following projects:
   DataLayer project - provides acces to data
 # Requirements
 Windows 10 or Linux
+
 .NET Core 3.1
 # Known bugs
 # HELP
