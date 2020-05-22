@@ -125,7 +125,7 @@ namespace UserInteraction
                         int toAdd = menu.AskAddRecord();
                         if (toAdd == 1)
                         {
-                            AddRecord(inputLine, filePath, catalogs);
+                            expenses.UnitId = AddRecord(inputLine, filePath, catalogs);
                             isInputFieldFinished = true;
                         }
                         else if (toAdd == 2)
@@ -147,11 +147,12 @@ namespace UserInteraction
             return isInputFieldFinished;
         }
 
-        private static void AddRecord(string inputLine, string filePath, List<Catalog> catalogs)
+        private static int AddRecord(string inputLine, string filePath, List<Catalog> catalogs)
         {
             int id = catalogs.LastOrDefault().Id + 1;
             string allLines = Environment.NewLine + id.ToString() + Constant.Delimiter + inputLine;
             Data.SaveData(filePath, allLines);
+            return id;
         }
 
         public static bool InputCategory(Expenses expenses)
@@ -192,7 +193,7 @@ namespace UserInteraction
                         int toAdd = menu.AskAddRecord();
                         if (toAdd == 1)
                         {
-                            AddRecord(inputLine, filePath, catalogs);
+                            expenses.CategoryId = AddRecord(inputLine, filePath, catalogs);
                             isInputFieldFinished = true;
                         }
                         else if (toAdd == 2)
@@ -252,7 +253,7 @@ namespace UserInteraction
                         int toAdd = menu.AskAddRecord();
                         if (toAdd == 1)
                         {
-                            AddRecord(inputLine, filePath, catalogs);
+                            expenses.GoodsId = AddRecord(inputLine, filePath, catalogs);
                             isInputFieldFinished = true;
                         }
                         else if (toAdd == 2)
@@ -338,15 +339,15 @@ namespace UserInteraction
                         Expenses expenses = null;
                         if (catalogies == CatalogType.GoodsCategory)
                         {
-                             expenses = Data.GetExpenses().FirstOrDefault(x => x.CategoryId == userInput);
+                            expenses = Data.GetExpenses().FirstOrDefault(x => x.CategoryId == userInput);
                         }
                         else if (catalogies == CatalogType.Goods)
                         {
-                             expenses = Data.GetExpenses().FirstOrDefault(x => x.GoodsId == userInput);
+                            expenses = Data.GetExpenses().FirstOrDefault(x => x.GoodsId == userInput);
                         }
                         else if (catalogies == CatalogType.Unit)
                         {
-                             expenses = Data.GetExpenses().FirstOrDefault(x => x.UnitId == userInput);
+                            expenses = Data.GetExpenses().FirstOrDefault(x => x.UnitId == userInput);
                         }
 
                         if (expenses != null)
@@ -361,7 +362,7 @@ namespace UserInteraction
                             isInputFieldFinished = true;
                         }
 
-                        
+
                     }
                 }
 
@@ -370,6 +371,33 @@ namespace UserInteraction
         public static void DeletePurchase()
         {
             Console.WriteLine("Введите ID удаляемой покупки:");
+            bool isInputFieldFinished = false;
+            while (!isInputFieldFinished)
+            {
+                string inputLine = Console.ReadLine();
+                if (inputLine.Length == 0)
+                {
+                    continue;
+                }
+                int userInput = 0;
+                string filePath = "Expenses.csv";
+                List<Expenses> expenses = Data.GetExpenses();
+                if (int.TryParse(inputLine, out userInput))
+                {
+                    Expenses expense = expenses.FirstOrDefault(x => x.Id == userInput);
+                    if (expense == null)
+                    {
+                        Console.WriteLine("Запись с данным ID не существует.");
+                    }
+                    else
+                    {
+                        expenses.Remove(expense);
+                        string lines = Expenses.ListToCsv(expenses);
+                        Data.SaveAllData(filePath, lines);
+                        isInputFieldFinished = true;
+                    }
+                }
+            }
         }
     }
 }

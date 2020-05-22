@@ -21,5 +21,20 @@ namespace Entities
                 + Constant.Delimiter + Quantity
                 + Constant.Delimiter + Date + Environment.NewLine;
         }
+        public static string ListToCsv(List<Expenses> expenses)
+        {
+            string line = string.Empty;
+            foreach (var item in expenses)
+            {
+                line = line + item.Id.ToString() + Constant.Delimiter + item.CategoryId
+                + Constant.Delimiter + item.GoodsId + Constant.Delimiter + item.UnitId
+                + Constant.Delimiter + item.Price
+                + Constant.Delimiter + item.Quantity
+                + Constant.Delimiter + item.Date + Environment.NewLine; ;
+
+            }
+            
+            return line;
+        }
     }
 }

@@ -62,8 +62,8 @@ namespace Test_1
                         UserInput.DeleteRecord(deleteMenu);
                     }
                     else if (deleteMenu == 4)
-                    { 
-                        
+                    {
+                        UserInput.DeletePurchase();
                     }
                 }
                 else if (menuItem == 4)

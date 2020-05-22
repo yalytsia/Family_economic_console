@@ -16,6 +16,7 @@ namespace Entities
                 line = line + item.Id.ToString() + Constant.Delimiter + item.Name + Environment.NewLine;
 
             }
+            line = line.TrimEnd(Environment.NewLine.ToCharArray());
             return line;
         }
     }
