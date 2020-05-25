@@ -146,6 +146,14 @@ namespace Test_1
                     }
 
                 }
+                else if (menuItem == 5)
+                {
+                    int editMenu = menu.EditMenu();
+                    if (editMenu >= 1 && editMenu <= 3)
+                    {
+                        UserInput.EditRecord(editMenu);
+                    }
+                }
             }
             
         }

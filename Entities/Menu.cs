@@ -13,6 +13,7 @@ namespace Entities
 			Console.WriteLine("2. Добавить запись в справочник");
 			Console.WriteLine("3. Удалить запись");
 			Console.WriteLine("4. Просмотр записей");
+			Console.WriteLine("5. Редактирование записей");
 			Console.WriteLine("0. Выход");
 
 			ConsoleKeyInfo userChoose = Console.ReadKey();
@@ -20,10 +21,10 @@ namespace Entities
 			if (char.IsDigit(userChoose.KeyChar))
 			{
 				UserMenuChoose = int.Parse(userChoose.KeyChar.ToString());
-				if (UserMenuChoose < 0 || UserMenuChoose > 4)
+				if (UserMenuChoose < 0 || UserMenuChoose > 5)
 				{
 					Console.Clear();
-					ErrorMessage(0, 4);
+					ErrorMessage(0, 5);
 					AdminMenuI();
 				}
 				return UserMenuChoose;
@@ -31,7 +32,7 @@ namespace Entities
 			else
 			{
 				Console.Clear();
-				ErrorMessage(0, 4);
+				ErrorMessage(0, 5);
 				AdminMenuI();
 			}
 
@@ -147,6 +148,34 @@ namespace Entities
 			else
 			{
 				ErrorMessage(0, 4);
+			}
+
+			return UserMenuChoose;
+		}
+		public int EditMenu()
+		{
+			Console.Clear();
+			Console.WriteLine("\nРедактировать:\n");
+			Console.WriteLine("1. Товар");
+			Console.WriteLine("2. Категорию товаров");
+			Console.WriteLine("3. Единицу измерения");
+			Console.WriteLine("0. Выход в предыдущее меню");
+
+			ConsoleKeyInfo userChoose = Console.ReadKey();
+
+			if (char.IsDigit(userChoose.KeyChar))
+			{
+				UserMenuChoose = int.Parse(userChoose.KeyChar.ToString());
+				if (UserMenuChoose < 0 || UserMenuChoose > 3)
+				{
+					ErrorMessage(0, 3);
+
+				}
+				return UserMenuChoose;
+			}
+			else
+			{
+				ErrorMessage(0, 3);
 			}
 
 			return UserMenuChoose;

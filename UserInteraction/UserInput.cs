@@ -149,8 +149,9 @@ namespace UserInteraction
 
         private static int AddRecord(string inputLine, string filePath, List<Catalog> catalogs)
         {
+            string line = ValidateName(catalogs, inputLine);
             int id = catalogs.LastOrDefault().Id + 1;
-            string allLines = Environment.NewLine + id.ToString() + Constant.Delimiter + inputLine;
+            string allLines = Environment.NewLine + id.ToString() + Constant.Delimiter + line;
             Data.SaveData(filePath, allLines);
             return id;
         }
@@ -283,17 +284,16 @@ namespace UserInteraction
             {
 
                 inputLine = Console.ReadLine();
-
                 if (inputLine != String.Empty && !int.TryParse(inputLine, out _))
                 {
-                    id++;
+                   inputLine = ValidateName(catalogList, inputLine);
+                   id++;
                     if (counter == 0 && id > 1)
                     {
                         allLines = Environment.NewLine;
                     }
                     string[] lines = allLines.Split(Environment.NewLine);
-                    if (catalogList.FirstOrDefault(x => x.Name.ToLower() == inputLine.ToLower()) == null &&
-                        lines.FirstOrDefault(x => x.ToLower() == inputLine.ToLower()) == null)
+                    if (lines.FirstOrDefault(x => x.ToLower() == inputLine.ToLower()) == null)
                     {
                         allLines = allLines + id.ToString() + Constant.Delimiter + inputLine + Environment.NewLine;
                     }
@@ -398,6 +398,56 @@ namespace UserInteraction
                     }
                 }
             }
+        }
+        public static void EditRecord(int menuCatalog)
+        {
+            Console.WriteLine("Введите ID редактируемой записи:");
+            bool isInputFieldFinished = false;
+            CatalogType catalogies = (CatalogType)menuCatalog;
+            while (!isInputFieldFinished)
+            {
+                string inputLine = Console.ReadLine();
+                if (inputLine.Trim().Length == 0)
+                {
+                    continue;
+                }
+                int userInput = 0;
+                string filePath = catalogies + ".csv";
+                List<Catalog> catalogs = Data.GetList(filePath);
+                if (int.TryParse(inputLine, out userInput))
+                {
+                    Catalog catalog = catalogs.FirstOrDefault(x => x.Id == userInput);
+                    if (catalog == null)
+                    {
+                        Console.WriteLine("Запись с данным ID не существует.");
+                    }
+                    else
+                    {
+                        string editedName = Console.ReadLine();
+                        catalog.Name = ValidateName(catalogs, editedName);
+
+                        string lines = Catalog.ListToCsv(catalogs);
+                        Data.SaveAllData(filePath, lines);
+                        isInputFieldFinished = true;
+                    }
+                }
+            }
+        }
+
+        private static string ValidateName(List<Catalog> catalogs, string editedName)
+        {
+            string inputLine = editedName;
+            while (inputLine.Trim().Length == 0 ||
+                                        (!string.IsNullOrEmpty(inputLine) &&
+                                        !char.IsDigit(inputLine.ToCharArray()[0]) &&
+                                        !inputLine.Contains(Constant.Delimiter) &&
+                                        catalogs.FirstOrDefault(x => x.Name.ToLower() == inputLine.ToLower()) != null))                                 
+            {
+                Console.WriteLine($"Имя должно начинаться с буквы, не содержать {Constant.Delimiter} и быть уникальным.");
+                inputLine = Console.ReadLine();
+            }       
+            return inputLine;
+
         }
     }
 }
