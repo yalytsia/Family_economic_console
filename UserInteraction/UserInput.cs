@@ -123,6 +123,10 @@ namespace UserInteraction
                         Console.WriteLine("Eдиницa измерения с данным именем не существует. Добавить?");
                         Menu menu = new Menu();
                         int toAdd = menu.AskAddRecord();
+                        while (toAdd != 1 && toAdd != 2)
+                        {
+                            toAdd = menu.AskAddRecord();
+                        }
                         if (toAdd == 1)
                         {
                             expenses.UnitId = AddRecord(inputLine, filePath, catalogs);
@@ -192,6 +196,10 @@ namespace UserInteraction
                         Console.WriteLine("Категория с данным именем не существует. Добавить?");
                         Menu menu = new Menu();
                         int toAdd = menu.AskAddRecord();
+                        while (toAdd != 1 && toAdd != 2)
+                        {
+                            toAdd = menu.AskAddRecord();
+                        }
                         if (toAdd == 1)
                         {
                             expenses.CategoryId = AddRecord(inputLine, filePath, catalogs);
@@ -252,6 +260,10 @@ namespace UserInteraction
                         Console.WriteLine("Товар с данным именем не существует. Добавить?");
                         Menu menu = new Menu();
                         int toAdd = menu.AskAddRecord();
+                        while (toAdd != 1 && toAdd != 2)
+                        {
+                            toAdd = menu.AskAddRecord();
+                        }
                         if (toAdd == 1)
                         {
                             expenses.GoodsId = AddRecord(inputLine, filePath, catalogs);
@@ -260,10 +272,9 @@ namespace UserInteraction
                         else if (toAdd == 2)
                         {
                             InputName(expenses);
-
                             isInputFieldFinished = true;
                         }
-                    }
+                     }
                     else
                     {
                         expenses.GoodsId = catalog.Id;
