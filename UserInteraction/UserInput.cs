@@ -288,6 +288,7 @@ namespace UserInteraction
         public static string ProcessUserInput(int id, CatalogType catalogies)
         {
             string allLines = String.Empty;
+            string checkLines = String.Empty;
             string inputLine;
             int counter = 0;
             List<Catalog> catalogList = Data.GetList(catalogies + ".csv");
@@ -303,10 +304,12 @@ namespace UserInteraction
                     {
                         allLines = Environment.NewLine;
                     }
-                    string[] lines = allLines.Split(Environment.NewLine);
+                    string[] lines = checkLines.Split(Environment.NewLine);
+
                     if (lines.FirstOrDefault(x => x.ToLower() == inputLine.ToLower()) == null)
                     {
                         allLines = allLines + id.ToString() + Constant.Delimiter + inputLine + Environment.NewLine;
+                        checkLines = checkLines + inputLine + Environment.NewLine;
                     }
                 }
                 counter++;
