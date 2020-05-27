@@ -6,6 +6,5 @@ namespace Entities
 {
     public class GoodsCategories : Catalog
     {
-       
     }
 }

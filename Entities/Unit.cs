@@ -6,6 +6,5 @@ namespace Entities
 {
     class Unit : Catalog
     {
-        
     }
 }

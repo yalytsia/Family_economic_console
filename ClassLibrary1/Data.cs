@@ -11,7 +11,6 @@ namespace DataLayer
     {
         public static int GetMaxId(string filePath)
         {
-            
             string lastLine = File.ReadLines(filePath).LastOrDefault(x => x.Length > 0);
             int id = lastLine == null ? 0 : int.Parse(lastLine.Split(Constant.Delimiter)[0]);
             return id;
@@ -50,7 +49,6 @@ namespace DataLayer
             using (MemoryStream ms = new MemoryStream())
             {
                 ms.Write(csvLineBytes, 0, csvLineBytes.Length);
-
                 using (FileStream file = new FileStream(filePath, FileMode.Truncate))
                 {
                     ms.WriteTo(file);
@@ -69,7 +67,6 @@ namespace DataLayer
             List<Catalog> catalogs = new List<Catalog>();
             using (var reader = new StreamReader(filePath))
             {
-
                 while (!reader.EndOfStream)
                 {
                     var line = reader.ReadLine();
@@ -87,7 +84,6 @@ namespace DataLayer
             List<Expenses> expensesList = new List<Expenses>();
             using (var reader = new StreamReader("Expenses.csv"))
             {
-
                 while (!reader.EndOfStream)
                 {
                     string line = reader.ReadLine();

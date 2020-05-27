@@ -6,8 +6,5 @@ namespace Entities
 {
     public class Goods : Catalog
     {
-  
     }
-
-
 }

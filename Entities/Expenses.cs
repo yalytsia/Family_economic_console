@@ -5,7 +5,7 @@ using System.Text;
 namespace Entities
 {
     public class Expenses
-    { 
+    {
         public int Id { get; set; }
         public int CategoryId { get; set; }
         public int GoodsId { get; set; }
@@ -31,9 +31,7 @@ namespace Entities
                 + Constant.Delimiter + item.Price
                 + Constant.Delimiter + item.Quantity
                 + Constant.Delimiter + item.Date + Environment.NewLine; ;
-
             }
-            
             return line;
         }
     }
