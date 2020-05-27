@@ -16,14 +16,10 @@ namespace Test_1
         static int pageSize = 7;
         static void Main(string[] args)
         {
-          
             while (true)
             {
                 Menu menu = new Menu();
-                 
                 int menuItem = menu.AdminMenuI();
-
-
                 if (menuItem == 0)
                 {
                     Environment.Exit(0);
@@ -73,18 +69,13 @@ namespace Test_1
                     {
                         CatalogType catalogies = (CatalogType)viewRecordMenu;
                         ConsoleKeyInfo userChoose = Console.ReadKey();
-
                         if (viewRecordMenu == 4)
                         {
                             UserOutput.TableExpenses(((pageCounter - 1) * pageSize), pageCounter * pageSize);
-
                             int maxId = Data.GetMaxId("Expenses.csv");
-
                             while (userChoose.Key != ConsoleKey.Escape)
                             {
-
                                 UserOutput.TableExpenses(((pageCounter - 1) * pageSize), pageCounter * pageSize);
-
                                 if (userChoose.Key == ConsoleKey.PageDown ||
                                     userChoose.Key == ConsoleKey.DownArrow ||
                                     userChoose.Key == ConsoleKey.RightArrow)
@@ -98,7 +89,6 @@ namespace Test_1
                                     userChoose.Key == ConsoleKey.UpArrow ||
                                     userChoose.Key == ConsoleKey.LeftArrow)
                                 {
-
                                     if (pageCounter > 1)
                                     {
                                         pageCounter = pageCounter - 1;
@@ -107,18 +97,14 @@ namespace Test_1
                                 userChoose = Console.ReadKey();
                             }
                         }
-
                         else
                         {
-
                             CatalogType catalog = (CatalogType)viewRecordMenu;
                             UserOutput.TableCatalogs(catalog, ((pageCounter - 1) * pageSize), pageCounter * pageSize);
                             int maxId = Data.GetMaxId(catalog + ".csv");
                             while (userChoose.Key != ConsoleKey.Escape)
                             {
                                 UserOutput.TableCatalogs(catalog, ((pageCounter - 1) * pageSize), pageCounter * pageSize);
-
-
                                 if (userChoose.Key == ConsoleKey.PageDown ||
                                     userChoose.Key == ConsoleKey.DownArrow ||
                                     userChoose.Key == ConsoleKey.RightArrow)
@@ -140,11 +126,9 @@ namespace Test_1
                                 }
                                 userChoose = Console.ReadKey();
                             }
-
                         }
                         Console.ReadKey();
                     }
-
                 }
                 else if (menuItem == 5)
                 {
@@ -155,21 +139,6 @@ namespace Test_1
                     }
                 }
             }
-            
         }
-
-        
-
-
-
-
-
-
-
-
-
-
-
     }
-
 }

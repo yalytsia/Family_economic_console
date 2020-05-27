@@ -29,16 +29,24 @@ namespace UserInteraction
             {
                 Console.WriteLine(" |     |                     |                               |                    |            |         |            |");
                 Console.WriteLine(" | {0}| {1}| {2}| {3}| {4}| {5}| {6} |",
-                    expensesList[i].Id + new string(' ', 4 - expensesList[i].Id.ToString().Length),
-                    categories.FirstOrDefault(x => x.Id == expensesList[i].CategoryId).Name + new string(' ', 20 - categories.FirstOrDefault(x => x.Id == expensesList[i].CategoryId).Name.Length),
-                    goods.FirstOrDefault(x => x.Id == expensesList[i].GoodsId).Name + new string(' ', 30 - goods.FirstOrDefault(x => x.Id == expensesList[i].GoodsId).Name.Length),
-                    units.FirstOrDefault(x => x.Id == expensesList[i].UnitId).Name + new string(' ', 19 - units.FirstOrDefault(x => x.Id == expensesList[i].UnitId).Name.Length),
-                    expensesList[i].Price + new string(' ', 11 - expensesList[i].Price.ToString().Length),
-                    expensesList[i].Quantity + new string(' ', 8 - expensesList[i].Quantity.ToString().Length),
+                    expensesList[i].Id + new string(' ', Constant.IdColumnLength - expensesList[i].Id.ToString().Length),
+                    FormatName(categories.FirstOrDefault(x => x.Id == expensesList[i].CategoryId).Name, Constant.CategoryColumnLength),
+                    FormatName(goods.FirstOrDefault(x => x.Id == expensesList[i].GoodsId).Name, Constant.NameColumnLength),
+                    FormatName(units.FirstOrDefault(x => x.Id == expensesList[i].UnitId).Name, Constant.UnitColumnLength),
+                    expensesList[i].Price + new string(' ', Constant.PriceColumnLength - expensesList[i].Price.ToString().Length),
+                    expensesList[i].Quantity + new string(' ', Constant.QuantityColumnLength - expensesList[i].Quantity.ToString().Length),
                     expensesList[i].Date.ToShortDateString());
                 Console.WriteLine(" |_____|_____________________|_______________________________|____________________|____________|_________|____________|");
             }
         }
+
+        private static string FormatName(string name, int columnLength)
+        {
+            return columnLength - name.Length >= 0 ?
+                                 name + new string(' ', columnLength - name.Length)
+                                 : name.Substring(0, columnLength);
+        }
+
         public static void TableCatalogs(CatalogType catalogType, int from, int to)
         {
             List<Catalog> catalog = Data.GetList(catalogType + ".csv").Where(x => x.Id > from && x.Id <= to).ToList();
