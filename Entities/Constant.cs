@@ -13,5 +13,8 @@ namespace Entities
         public const int UnitColumnLength = 19;
         public const int PriceColumnLength = 11;
         public const int QuantityColumnLength = 8;
+        public const int DateColumnLength = 12;
+        public const int IdCatColumnLength = 6;
+        public const int NameCatColumnLength = 108;
     }
 }
