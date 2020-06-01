@@ -48,7 +48,7 @@ namespace UserInteraction
         public static void TableCatalogs(CatalogType catalogType, int from, int to)
         {
             List<Catalog> catalog = Data.GetList(catalogType + ".csv").Where(x => x.Id > from && x.Id <= to).ToList();
-            int[] maxWidth = new int[] { Constant.IdCatColumnLength, Constant.NameCatColumnLength};
+            int[] maxWidth = new int[] { Constant.IdCatColumnLength, Constant.NameCatColumnLength };
 
             Console.Clear();
             Console.WriteLine(" .____________________________________________________________________________________________________________________.");
@@ -61,7 +61,7 @@ namespace UserInteraction
             for (int i = 0; i < catalog.Count; i++)
             {
                 Console.WriteLine(" |       |                                                                                                            |");
-                string[] row = new string[] {catalog[i].Id.ToString(), catalog[i].Name};
+                string[] row = new string[] { catalog[i].Id.ToString(), catalog[i].Name };
                 CellLineBreak(row, maxWidth);
 
                 Console.WriteLine(" |_______|____________________________________________________________________________________________________________|");
@@ -110,8 +110,10 @@ namespace UserInteraction
                 if (needExtraRow)
                 {
                     splitRow++;
+                    Console.WriteLine();
                 }
             } while (needExtraRow);
+            Console.WriteLine();
         }
     }
 }

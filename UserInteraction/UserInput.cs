@@ -9,87 +9,140 @@ namespace UserInteraction
 {
     public class UserInput
     {
-        public static bool InputDate(Expenses expenses)
+        private static int AddRecord(string inputLine, string filePath, List<Catalog> catalogs)
         {
-            bool isInputFieldFinished;
-            Console.WriteLine();
-            Console.WriteLine("Введите дату покупки (Enter - текущая дата):");
-            isInputFieldFinished = false;
-            while (!isInputFieldFinished)
-            {
-                string inputLine = Console.ReadLine();
-                DateTime userInput;
-                if (inputLine == string.Empty)
-                {
-                    expenses.Date = DateTime.Today;
-                    isInputFieldFinished = true;
-                }
-                else if (DateTime.TryParse(inputLine, out userInput))
-                {
-                    expenses.Date = userInput;
-                    isInputFieldFinished = true;
-                }
-                else
-                {
-                    Console.WriteLine("Введите дату в формате (как-то).");
-                }
-            }
-            return isInputFieldFinished;
+            string line = ValidateName(catalogs, inputLine);
+            int id = catalogs.LastOrDefault().Id + 1;
+            string allLines = Environment.NewLine + id.ToString() + Constant.Delimiter + line;
+            Data.SaveData(filePath, allLines);
+            return id;
         }
-
-        public static bool InputQuantity(Expenses expenses)
+        public static bool InputCategory(Expenses expenses)
         {
-            bool isInputFieldFinished;
-            Console.WriteLine();
-            Console.WriteLine("Введите количество:");
-            isInputFieldFinished = false;
+            bool isInputFieldFinished = false;
+            Console.WriteLine("\n Введите категорию:");
             while (!isInputFieldFinished)
             {
                 string inputLine = Console.ReadLine();
-                float userInput = 0;
-                if (float.TryParse(inputLine, out userInput) && userInput > 0)
+                if (inputLine.Length == 0)
                 {
-                    expenses.Quantity = userInput;
-                    isInputFieldFinished = true;
+                    continue;
+                }
+                int userInput = 0;
+                string filePath = CatalogType.GoodsCategory + ".csv";
+                List<Catalog> catalogs = Data.GetList(filePath);
+                if (int.TryParse(inputLine, out userInput))
+                {
+                    Catalog catalog = catalogs.FirstOrDefault(x => x.Id == userInput);
+                    if (catalog == null)
+                    {
+                        Console.WriteLine(" Категория с данным ID не существует.");
+                    }
+                    else
+                    {
+                        expenses.CategoryId = userInput;
+                        isInputFieldFinished = true;
+                    }
                 }
                 else
                 {
-                    Console.WriteLine("Используйте только цифры больше 0 и десятичные дроби для ввода количества.");
-                }
-            }
+                    Catalog catalog = catalogs.FirstOrDefault(x => inputLine.Length > 0 && x.Name.ToLower().StartsWith(inputLine.ToLower()));
+                    if (catalog == null)
+                    {
+                        Console.WriteLine(" Категория с данным именем не существует. Добавить?");
+                        Menu menu = new Menu();
+                        int toAdd = menu.AskAddRecord();
+                        while (toAdd != 1 && toAdd != 2)
+                        {
+                            toAdd = menu.AskAddRecord();
+                        }
+                        if (toAdd == 1)
+                        {
+                            expenses.CategoryId = AddRecord(inputLine, filePath, catalogs);
+                            isInputFieldFinished = true;
+                        }
+                        else if (toAdd == 2)
+                        {
+                            InputCategory(expenses);
 
-            return isInputFieldFinished;
-        }
-
-        public static bool InputPrice(Expenses expenses)
-        {
-            bool isInputFieldFinished;
-            Console.WriteLine();
-            Console.WriteLine("Введите цену товара:");
-            isInputFieldFinished = false;
-            while (!isInputFieldFinished)
-            {
-                string inputLine = Console.ReadLine();
-                decimal userInput = 0;
-                if (decimal.TryParse(inputLine, out userInput))
-                {
-                    expenses.Price = userInput;
-                    isInputFieldFinished = true;
-                }
-                else
-                {
-                    Console.WriteLine("Используйте только цифры для ввода цены.");
+                            isInputFieldFinished = true;
+                        }
+                    }
+                    else
+                    {
+                        expenses.CategoryId = catalog.Id;
+                        isInputFieldFinished = true;
+                    }
                 }
             }
 
             return isInputFieldFinished;
         }
+        public static bool InputName(Expenses expenses)
+        {
+            Console.WriteLine("\n Введите наименование товара:");
+            bool isInputFieldFinished = false;
+            while (!isInputFieldFinished)
+            {
+                string inputLine = Console.ReadLine();
+                if (inputLine.Length == 0)
+                {
+                    continue;
+                }
 
+                int userInput = 0;
+                string filePath = CatalogType.Goods + ".csv";
+                List<Catalog> catalogs = Data.GetList(filePath);
+                if (int.TryParse(inputLine, out userInput))
+                {
+                    Catalog catalog = catalogs.FirstOrDefault(x => x.Id == userInput);
+                    if (catalog == null)
+                    {
+                        Console.WriteLine(" Товар с данным ID не существует.");
+                    }
+                    else
+                    {
+                        expenses.GoodsId = userInput;
+                        isInputFieldFinished = true;
+                    }
+                }
+                else
+                {
+                    Catalog catalog = catalogs.FirstOrDefault(x => inputLine.Length > 0 && x.Name.ToLower().StartsWith(inputLine.ToLower()));
+                    if (catalog == null)
+                    {
+                        Console.WriteLine(" Товар с данным именем не существует. Добавить?");
+                        Menu menu = new Menu();
+                        int toAdd = menu.AskAddRecord();
+                        while (toAdd != 1 && toAdd != 2)
+                        {
+                            toAdd = menu.AskAddRecord();
+                        }
+                        if (toAdd == 1)
+                        {
+                            expenses.GoodsId = AddRecord(inputLine, filePath, catalogs);
+                            isInputFieldFinished = true;
+                        }
+                        else if (toAdd == 2)
+                        {
+                            InputName(expenses);
+                            isInputFieldFinished = true;
+                        }
+                    }
+                    else
+                    {
+                        expenses.GoodsId = catalog.Id;
+                        isInputFieldFinished = true;
+                    }
+                }
+            }
+
+            return isInputFieldFinished;
+        }
         public static bool InputUnit(Expenses expenses)
         {
             bool isInputFieldFinished;
-            Console.WriteLine();
-            Console.WriteLine("Введите единицы измерения товара:");
+            Console.WriteLine("\n Введите единицы измерения товара:");
             isInputFieldFinished = false;
             while (!isInputFieldFinished)
             {
@@ -106,7 +159,7 @@ namespace UserInteraction
                     Catalog catalog = catalogs.FirstOrDefault(x => x.Id == userInput);
                     if (catalog == null)
                     {
-                        Console.WriteLine("Eдиницa измерения с данным ID не существует.");
+                        Console.WriteLine(" Eдиницa измерения с данным ID не существует.");
 
                     }
                     else
@@ -120,7 +173,7 @@ namespace UserInteraction
                     Catalog catalog = catalogs.FirstOrDefault(x => inputLine.Length > 0 && x.Name.ToLower().StartsWith(inputLine.ToLower()));
                     if (catalog == null)
                     {
-                        Console.WriteLine("Eдиницa измерения с данным именем не существует. Добавить?");
+                        Console.WriteLine(" Eдиницa измерения с данным именем не существует. Добавить?");
                         Menu menu = new Menu();
                         int toAdd = menu.AskAddRecord();
                         while (toAdd != 1 && toAdd != 2)
@@ -150,139 +203,75 @@ namespace UserInteraction
 
             return isInputFieldFinished;
         }
-
-        private static int AddRecord(string inputLine, string filePath, List<Catalog> catalogs)
+        public static bool InputPrice(Expenses expenses)
         {
-            string line = ValidateName(catalogs, inputLine);
-            int id = catalogs.LastOrDefault().Id + 1;
-            string allLines = Environment.NewLine + id.ToString() + Constant.Delimiter + line;
-            Data.SaveData(filePath, allLines);
-            return id;
-        }
-
-        public static bool InputCategory(Expenses expenses)
-        {
-            bool isInputFieldFinished = false;
-            Console.WriteLine();
-            Console.WriteLine("Введите категорию:");
+            bool isInputFieldFinished;
+            Console.WriteLine(" Введите цену товара:");
+            isInputFieldFinished = false;
             while (!isInputFieldFinished)
             {
                 string inputLine = Console.ReadLine();
-                if (inputLine.Length == 0)
+                decimal userInput = 0;
+                if (decimal.TryParse(inputLine, out userInput))
                 {
-                    continue;
-                }
-                int userInput = 0;
-                string filePath = CatalogType.GoodsCategory + ".csv";
-                List<Catalog> catalogs = Data.GetList(filePath);
-                if (int.TryParse(inputLine, out userInput))
-                {
-                    Catalog catalog = catalogs.FirstOrDefault(x => x.Id == userInput);
-                    if (catalog == null)
-                    {
-                        Console.WriteLine("Категория с данным ID не существует.");
-                    }
-                    else
-                    {
-                        expenses.CategoryId = userInput;
-                        isInputFieldFinished = true;
-                    }
+                    expenses.Price = userInput;
+                    isInputFieldFinished = true;
                 }
                 else
                 {
-                    Catalog catalog = catalogs.FirstOrDefault(x => inputLine.Length > 0 && x.Name.ToLower().StartsWith(inputLine.ToLower()));
-                    if (catalog == null)
-                    {
-                        Console.WriteLine("Категория с данным именем не существует. Добавить?");
-                        Menu menu = new Menu();
-                        int toAdd = menu.AskAddRecord();
-                        while (toAdd != 1 && toAdd != 2)
-                        {
-                            toAdd = menu.AskAddRecord();
-                        }
-                        if (toAdd == 1)
-                        {
-                            expenses.CategoryId = AddRecord(inputLine, filePath, catalogs);
-                            isInputFieldFinished = true;
-                        }
-                        else if (toAdd == 2)
-                        {
-                            InputCategory(expenses);
-
-                            isInputFieldFinished = true;
-                        }
-                    }
-                    else
-                    {
-                        expenses.CategoryId = catalog.Id;
-                        isInputFieldFinished = true;
-                    }
+                    Console.WriteLine(" Используйте только цифры для ввода цены.");
                 }
             }
 
             return isInputFieldFinished;
         }
-
-        public static bool InputName(Expenses expenses)
+        public static bool InputQuantity(Expenses expenses)
         {
-            Console.WriteLine();
-            Console.WriteLine("Введите наименование товара:");
-            bool isInputFieldFinished = false;
+            bool isInputFieldFinished;
+            Console.WriteLine(" Введите количество:");
+            isInputFieldFinished = false;
             while (!isInputFieldFinished)
             {
                 string inputLine = Console.ReadLine();
-                if (inputLine.Length == 0)
+                float userInput = 0;
+                if (float.TryParse(inputLine, out userInput) && userInput > 0)
                 {
-                    continue;
-                }
-
-                int userInput = 0;
-                string filePath = CatalogType.Goods + ".csv";
-                List<Catalog> catalogs = Data.GetList(filePath);
-                if (int.TryParse(inputLine, out userInput))
-                {
-                    Catalog catalog = catalogs.FirstOrDefault(x => x.Id == userInput);
-                    if (catalog == null)
-                    {
-                        Console.WriteLine("Товар с данным ID не существует.");
-                    }
-                    else
-                    {
-                        expenses.GoodsId = userInput;
-                        isInputFieldFinished = true;
-                    }
+                    expenses.Quantity = userInput;
+                    isInputFieldFinished = true;
                 }
                 else
                 {
-                    Catalog catalog = catalogs.FirstOrDefault(x => inputLine.Length > 0 && x.Name.ToLower().StartsWith(inputLine.ToLower()));
-                    if (catalog == null)
-                    {
-                        Console.WriteLine("Товар с данным именем не существует. Добавить?");
-                        Menu menu = new Menu();
-                        int toAdd = menu.AskAddRecord();
-                        while (toAdd != 1 && toAdd != 2)
-                        {
-                            toAdd = menu.AskAddRecord();
-                        }
-                        if (toAdd == 1)
-                        {
-                            expenses.GoodsId = AddRecord(inputLine, filePath, catalogs);
-                            isInputFieldFinished = true;
-                        }
-                        else if (toAdd == 2)
-                        {
-                            InputName(expenses);
-                            isInputFieldFinished = true;
-                        }
-                     }
-                    else
-                    {
-                        expenses.GoodsId = catalog.Id;
-                        isInputFieldFinished = true;
-                    }
+                    Console.WriteLine(" Используйте только цифры больше 0 и десятичные дроби для ввода количества.");
                 }
             }
 
+            return isInputFieldFinished;
+        }
+        public static bool InputDate(Expenses expenses)
+        {
+            bool isInputFieldFinished;
+            Console.WriteLine("\n Введите дату покупки (Enter - текущая дата):");
+            isInputFieldFinished = false;
+            while (!isInputFieldFinished)
+            {
+                string inputLine = Console.ReadLine();
+                DateTime userInput;
+                if (inputLine == string.Empty)
+                {
+                    expenses.Date = DateTime.Today;
+                    isInputFieldFinished = true;
+                }
+                else if (DateTime.TryParse(inputLine, out userInput))
+                {
+                    expenses.Date = userInput;
+                    isInputFieldFinished = true;
+                }
+                else
+                {
+                    Console.WriteLine(" Введите дату цифрами через разделитель или пробел.");
+                }
+            }
+            Console.Clear();
             return isInputFieldFinished;
         }
         public static string ProcessUserInput(int id, CatalogType catalogies)
@@ -298,8 +287,8 @@ namespace UserInteraction
                 inputLine = Console.ReadLine();
                 if (inputLine != String.Empty && !int.TryParse(inputLine, out _))
                 {
-                   inputLine = ValidateName(catalogList, inputLine);
-                   id++;
+                    inputLine = ValidateName(catalogList, inputLine);
+                    id++;
                     if (counter == 0 && id > 1)
                     {
                         allLines = Environment.NewLine;
@@ -319,7 +308,7 @@ namespace UserInteraction
         }
         public static void AddRecord(int menuCatalog)
         {
-            Console.WriteLine("Добавить:");
+            Console.WriteLine("\n Добавить:");
             CatalogType catalogies = (CatalogType)menuCatalog;
             string filePath = Data.CreateFile(catalogies.ToString());
             int id = Data.GetMaxId(filePath);
@@ -328,7 +317,7 @@ namespace UserInteraction
         }
         public static void DeleteRecord(int menuCatalog)
         {
-            Console.WriteLine("Введите ID удаляемой записи:");
+            Console.WriteLine(" Введите ID удаляемой записи:");
             bool isInputFieldFinished = false;
             CatalogType catalogies = (CatalogType)menuCatalog;
             while (!isInputFieldFinished)
@@ -346,7 +335,7 @@ namespace UserInteraction
                     Catalog catalog = catalogs.FirstOrDefault(x => x.Id == userInput);
                     if (catalog == null)
                     {
-                        Console.WriteLine("Запись с данным ID не существует.");
+                        Console.WriteLine(" Запись с данным ID не существует.");
                     }
                     else
                     {
@@ -384,7 +373,7 @@ namespace UserInteraction
         }
         public static void DeletePurchase()
         {
-            Console.WriteLine("Введите ID удаляемой покупки:");
+            Console.WriteLine(" Введите ID удаляемой покупки:");
             bool isInputFieldFinished = false;
             while (!isInputFieldFinished)
             {
@@ -401,7 +390,7 @@ namespace UserInteraction
                     Expenses expense = expenses.FirstOrDefault(x => x.Id == userInput);
                     if (expense == null)
                     {
-                        Console.WriteLine("Запись с данным ID не существует.");
+                        Console.WriteLine(" Запись с данным ID не существует.");
                     }
                     else
                     {
@@ -415,7 +404,7 @@ namespace UserInteraction
         }
         public static void EditRecord(int menuCatalog)
         {
-            Console.WriteLine("Введите ID редактируемой записи:");
+            Console.WriteLine("\n Введите ID редактируемой записи:");
             bool isInputFieldFinished = false;
             CatalogType catalogies = (CatalogType)menuCatalog;
             while (!isInputFieldFinished)
@@ -433,10 +422,12 @@ namespace UserInteraction
                     Catalog catalog = catalogs.FirstOrDefault(x => x.Id == userInput);
                     if (catalog == null)
                     {
-                        Console.WriteLine("Запись с данным ID не существует.");
+                        //Console.Clear();
+                        Console.WriteLine(" Запись с данным ID не существует.");
                     }
                     else
                     {
+                        Console.WriteLine(" Запишите новое имя.");
                         string editedName = Console.ReadLine();
                         catalog.Name = ValidateName(catalogs, editedName);
 
@@ -455,11 +446,11 @@ namespace UserInteraction
                                         (!string.IsNullOrEmpty(inputLine) &&
                                         !char.IsDigit(inputLine.ToCharArray()[0]) &&
                                         !inputLine.Contains(Constant.Delimiter) &&
-                                        catalogs.FirstOrDefault(x => x.Name.ToLower() == inputLine.ToLower()) != null))                                 
+                                        catalogs.FirstOrDefault(x => x.Name.ToLower() == inputLine.ToLower()) != null))
             {
-                Console.WriteLine($"Имя должно начинаться с буквы, не содержать {Constant.Delimiter} и быть уникальным.");
+                Console.WriteLine($" Имя должно начинаться с буквы, не содержать {Constant.Delimiter} и быть уникальным.");
                 inputLine = Console.ReadLine();
-            }       
+            }
             return inputLine;
 
         }
