@@ -95,7 +95,6 @@ namespace Test_1
                         int viewRecordMenu = new Menu().ViewRecordMenu();
                         if (viewRecordMenu >= 1 && viewRecordMenu <= 4)
                         {
-                            CatalogType catalogies = (CatalogType)viewRecordMenu;
                             ConsoleKeyInfo userChoose = Console.ReadKey();
                             if (viewRecordMenu == 4)
                             {
@@ -110,7 +109,7 @@ namespace Test_1
                                     {
                                         if (pageCounter * pageSize <= maxId)
                                         {
-                                            pageCounter = pageCounter + 1;
+                                            pageCounter += 1;
                                         }
                                     }
                                     if (userChoose.Key == ConsoleKey.PageUp ||
@@ -119,7 +118,7 @@ namespace Test_1
                                     {
                                         if (pageCounter > 1)
                                         {
-                                            pageCounter = pageCounter - 1;
+                                            pageCounter -= 1;
                                         }
                                     }
                                     userChoose = Console.ReadKey();
@@ -131,7 +130,7 @@ namespace Test_1
                                 CatalogType catalog = (CatalogType)viewRecordMenu;
                                 UserOutput.TableCatalogs(catalog, ((pageCounter - 1) * pageSize), pageCounter * pageSize);
                                 int maxId = Data.GetMaxId(catalog + ".csv");
-                                while (userChoose.Key != ConsoleKey.Escape)
+                                while (userChoose.Key != ConsoleKey.D0)
                                 {
                                     UserOutput.TableCatalogs(catalog, ((pageCounter - 1) * pageSize), pageCounter * pageSize);
                                     if (userChoose.Key == ConsoleKey.PageDown ||
@@ -140,7 +139,7 @@ namespace Test_1
                                     {
                                         if (pageCounter * pageSize <= maxId)
                                         {
-                                            pageCounter = pageCounter + 1;
+                                            pageCounter += 1;
                                         }
                                     }
                                     if (userChoose.Key == ConsoleKey.PageUp ||
@@ -150,7 +149,7 @@ namespace Test_1
 
                                         if (pageCounter > 1)
                                         {
-                                            pageCounter = pageCounter - 1;
+                                            pageCounter -= 1;
                                         }
                                     }
                                     userChoose = Console.ReadKey();

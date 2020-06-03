@@ -60,7 +60,6 @@ namespace Entities
             {
                 ErrorMessage(0, 3);
             }
-
             return UserMenuChoose;
         }
         public int ViewRecordMenu()

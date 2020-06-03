@@ -12,8 +12,8 @@ namespace UserInteraction
         private static int AddRecord(string inputLine, string filePath, List<Catalog> catalogs)
         {
             string line = ValidateName(catalogs, inputLine);
-            int id = catalogs.LastOrDefault().Id + 1;
-            string allLines = Environment.NewLine + id.ToString() + Constant.Delimiter + line;
+            int id = catalogs.Count == 0 ? 1 : catalogs.LastOrDefault().Id + 1;
+            string allLines = (id == 1 ? String.Empty : Environment.NewLine) + id.ToString() + Constant.Delimiter + line;
             Data.SaveData(filePath, allLines);
             return id;
         }
@@ -28,10 +28,9 @@ namespace UserInteraction
                 {
                     continue;
                 }
-                int userInput = 0;
-                string filePath = CatalogType.GoodsCategory + ".csv";
+                string filePath = Data.CreateFile(CatalogType.GoodsCategory.ToString());
                 List<Catalog> catalogs = Data.GetList(filePath);
-                if (int.TryParse(inputLine, out userInput))
+                if (int.TryParse(inputLine, out int userInput))
                 {
                     Catalog catalog = catalogs.FirstOrDefault(x => x.Id == userInput);
                     if (catalog == null)
@@ -89,11 +88,9 @@ namespace UserInteraction
                 {
                     continue;
                 }
-
-                int userInput = 0;
-                string filePath = CatalogType.Goods + ".csv";
+                string filePath = Data.CreateFile(CatalogType.Goods.ToString());
                 List<Catalog> catalogs = Data.GetList(filePath);
-                if (int.TryParse(inputLine, out userInput))
+                if (int.TryParse(inputLine, out int userInput))
                 {
                     Catalog catalog = catalogs.FirstOrDefault(x => x.Id == userInput);
                     if (catalog == null)
@@ -151,10 +148,9 @@ namespace UserInteraction
                 {
                     continue;
                 }
-                int userInput = 0;
-                string filePath = CatalogType.Unit + ".csv";
+                string filePath = Data.CreateFile(CatalogType.Unit.ToString());
                 List<Catalog> catalogs = Data.GetList(filePath);
-                if (int.TryParse(inputLine, out userInput))
+                if (int.TryParse(inputLine, out int userInput))
                 {
                     Catalog catalog = catalogs.FirstOrDefault(x => x.Id == userInput);
                     if (catalog == null)
@@ -211,8 +207,7 @@ namespace UserInteraction
             while (!isInputFieldFinished)
             {
                 string inputLine = Console.ReadLine();
-                decimal userInput = 0;
-                if (decimal.TryParse(inputLine, out userInput))
+                if (decimal.TryParse(inputLine, out decimal userInput))
                 {
                     expenses.Price = userInput;
                     isInputFieldFinished = true;
@@ -233,8 +228,7 @@ namespace UserInteraction
             while (!isInputFieldFinished)
             {
                 string inputLine = Console.ReadLine();
-                float userInput = 0;
-                if (float.TryParse(inputLine, out userInput) && userInput > 0)
+                if (float.TryParse(inputLine, out float userInput) && userInput > 0)
                 {
                     expenses.Quantity = userInput;
                     isInputFieldFinished = true;
@@ -255,13 +249,12 @@ namespace UserInteraction
             while (!isInputFieldFinished)
             {
                 string inputLine = Console.ReadLine();
-                DateTime userInput;
                 if (inputLine == string.Empty)
                 {
                     expenses.Date = DateTime.Today;
                     isInputFieldFinished = true;
                 }
-                else if (DateTime.TryParse(inputLine, out userInput))
+                else if (DateTime.TryParse(inputLine, out DateTime userInput))
                 {
                     expenses.Date = userInput;
                     isInputFieldFinished = true;
@@ -322,16 +315,22 @@ namespace UserInteraction
             CatalogType catalogies = (CatalogType)menuCatalog;
             while (!isInputFieldFinished)
             {
+
                 string inputLine = Console.ReadLine();
                 if (inputLine.Length == 0)
                 {
                     continue;
                 }
-                int userInput = 0;
-                string filePath = catalogies + ".csv";
+                string filePath = Data.CreateFile(catalogies.ToString());
                 List<Catalog> catalogs = Data.GetList(filePath);
-                if (int.TryParse(inputLine, out userInput))
+                if (int.TryParse(inputLine, out int userInput))
                 {
+                    if (userInput == 0)
+                    {
+                        Console.Clear();
+                        isInputFieldFinished = true;
+                        break;
+                    }
                     Catalog catalog = catalogs.FirstOrDefault(x => x.Id == userInput);
                     if (catalog == null)
                     {
@@ -364,11 +363,8 @@ namespace UserInteraction
                             Data.SaveAllData(filePath, lines);
                             isInputFieldFinished = true;
                         }
-
-
                     }
                 }
-
             }
         }
         public static void DeletePurchase()
@@ -382,11 +378,17 @@ namespace UserInteraction
                 {
                     continue;
                 }
-                int userInput = 0;
-                string filePath = "Expenses.csv";
+
+                string filePath = Data.CreateFile("Expenses");
                 List<Expenses> expenses = Data.GetExpenses();
-                if (int.TryParse(inputLine, out userInput))
+                if (int.TryParse(inputLine, out int userInput))
                 {
+                    if (userInput == 0)
+                    {
+                        Console.Clear();
+                        isInputFieldFinished = true;
+                        break;
+                    }
                     Expenses expense = expenses.FirstOrDefault(x => x.Id == userInput);
                     if (expense == null)
                     {
@@ -414,11 +416,16 @@ namespace UserInteraction
                 {
                     continue;
                 }
-                int userInput = 0;
-                string filePath = catalogies + ".csv";
+                string filePath = Data.CreateFile(catalogies.ToString());
                 List<Catalog> catalogs = Data.GetList(filePath);
-                if (int.TryParse(inputLine, out userInput))
+                if (int.TryParse(inputLine, out int userInput))
                 {
+                    if (userInput == 0)
+                    {
+                        Console.Clear();
+                        isInputFieldFinished = true;
+                        break;
+                    }
                     Catalog catalog = catalogs.FirstOrDefault(x => x.Id == userInput);
                     if (catalog == null)
                     {
@@ -430,10 +437,10 @@ namespace UserInteraction
                         Console.WriteLine(" Запишите новое имя.");
                         string editedName = Console.ReadLine();
                         catalog.Name = ValidateName(catalogs, editedName);
-
                         string lines = Catalog.ListToCsv(catalogs);
                         Data.SaveAllData(filePath, lines);
                         isInputFieldFinished = true;
+                        Console.Clear();
                     }
                 }
             }

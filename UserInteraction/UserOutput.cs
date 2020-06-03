@@ -47,7 +47,8 @@ namespace UserInteraction
         }
         public static void TableCatalogs(CatalogType catalogType, int from, int to)
         {
-            List<Catalog> catalog = Data.GetList(catalogType + ".csv").Where(x => x.Id > from && x.Id <= to).ToList();
+            string filePath = Data.CreateFile(catalogType.ToString());
+            List<Catalog> catalog = Data.GetList(filePath).Where(x => x.Id > from && x.Id <= to).ToList();
             int[] maxWidth = new int[] { Constant.IdCatColumnLength, Constant.NameCatColumnLength };
 
             Console.Clear();
@@ -69,10 +70,10 @@ namespace UserInteraction
         }
         private static void CellLineBreak(string[] row, int[] maxWidth)
         {
-            // If any cell data is more than max width, then it will need extra row.
-            bool needExtraRow = false;
             // Count of extra split row.
             int splitRow = 0;
+            // If any cell data is more than max width, then it will need extra row.
+            bool needExtraRow;
             do
             {
                 needExtraRow = false;
