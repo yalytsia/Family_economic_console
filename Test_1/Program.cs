@@ -32,11 +32,11 @@ namespace Test_1
 
                     while (!isInputFinished)
                     {
-                        UserInput.InputCategory(expenses);
-                        UserInput.InputName(expenses);
-                        UserInput.InputUnit(expenses);
-                        UserInput.InputPrice(expenses);
-                        UserInput.InputQuantity(expenses);
+                        expenses.CategoryId = UserInput.InputCatalog("категории", CatalogType.GoodsCategory, "Категория");
+                        expenses.GoodsId = UserInput.InputCatalog("товара", CatalogType.Goods, "Товар");
+                        expenses.UnitId = UserInput.InputCatalog("единицы измерения", CatalogType.Unit, "Единица измерения");
+                        expenses.Price = UserInput.InputNumber("цену товара", "цены");
+                        expenses.Quantity = UserInput.InputNumber("количество", "количества");
                         UserInput.InputDate(expenses);
                         isInputFinished = true;
                     }

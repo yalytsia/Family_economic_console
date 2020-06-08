@@ -82,7 +82,12 @@ namespace DataLayer
         public static List<Expenses> GetExpenses()
         {
             List<Expenses> expensesList = new List<Expenses>();
-            using (var reader = new StreamReader("Expenses.csv"))
+            string filePath = "Expenses.csv";
+            if (!File.Exists(filePath))
+            {
+                File.Create(filePath).Close();
+            }
+            using (var reader = new StreamReader(filePath))
             {
                 while (!reader.EndOfStream)
                 {
@@ -94,7 +99,7 @@ namespace DataLayer
                     expense.GoodsId = int.Parse(values[2]);
                     expense.UnitId = int.Parse(values[3]);
                     expense.Price = decimal.Parse(values[4]);
-                    expense.Quantity = float.Parse(values[5]);
+                    expense.Quantity = decimal.Parse(values[5]);
                     expense.Date = DateTime.Parse(values[6]);
                     expensesList.Add(expense);
                 }

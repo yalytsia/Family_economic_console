@@ -10,7 +10,15 @@ namespace UserInteraction
     {
         public static void TableExpenses(int from, int to)
         {
+
             List<Expenses> expensesList = Data.GetExpenses().Where(x => x.Id > from && x.Id <= to).ToList();
+            int maxEnum = Enum.GetValues(typeof(CatalogType)).Cast<int>().Max();
+            int minEnum = Enum.GetValues(typeof(CatalogType)).Cast<int>().Min();
+            for (CatalogType catalogType = (CatalogType)minEnum; catalogType <= (CatalogType)maxEnum; catalogType++)
+            {
+                Data.CreateFile(catalogType.ToString());
+            }
+
             List<Catalog> categories = Data.GetList(CatalogType.GoodsCategory + ".csv");
             List<Catalog> goods = Data.GetList(CatalogType.Goods + ".csv");
             List<Catalog> units = Data.GetList(CatalogType.Unit + ".csv");
