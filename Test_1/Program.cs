@@ -98,11 +98,11 @@ namespace Test_1
                             ConsoleKeyInfo userChoose = Console.ReadKey();
                             if (viewRecordMenu == 4)
                             {
-                                UserOutput.TableExpenses(((pageCounter - 1) * pageSize), pageCounter * pageSize);
+                                UserOutput.TableExpensesDynamic(((pageCounter - 1) * pageSize), pageCounter * pageSize);
                                 int maxId = Data.GetMaxId("Expenses.csv");
                                 while (userChoose.Key != ConsoleKey.D0)
                                 {
-                                    UserOutput.TableExpenses(((pageCounter - 1) * pageSize), pageCounter * pageSize);
+                                    UserOutput.TableExpensesDynamic(((pageCounter - 1) * pageSize), pageCounter * pageSize);
                                     if (userChoose.Key == ConsoleKey.PageDown ||
                                         userChoose.Key == ConsoleKey.DownArrow ||
                                         userChoose.Key == ConsoleKey.RightArrow)

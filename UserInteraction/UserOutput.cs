@@ -124,5 +124,79 @@ namespace UserInteraction
             } while (needExtraRow);
             Console.WriteLine();
         }
+        public static void TableExpensesDynamic(int from, int to)
+        {
+            List<Expenses> expensesList = Data.GetExpenses().Where(x => x.Id > from && x.Id <= to).ToList();
+            int maxEnum = Enum.GetValues(typeof(CatalogType)).Cast<int>().Max();
+            int minEnum = Enum.GetValues(typeof(CatalogType)).Cast<int>().Min();
+            for (CatalogType catalogType = (CatalogType)minEnum; catalogType <= (CatalogType)maxEnum; catalogType++)
+            {
+                Data.CreateFile(catalogType.ToString());
+            }
+
+            List<Catalog> categories = Data.GetList(CatalogType.GoodsCategory + ".csv");
+            List<Catalog> goods = Data.GetList(CatalogType.Goods + ".csv");
+            List<Catalog> units = Data.GetList(CatalogType.Unit + ".csv");
+            string mainHeader = "ПОКУПКИ";
+            string[] header = new string[] { "ID", "Категория", "Наименование", "Ед.измер.", "Цена", "Кол-во", "Дата" };
+            int WindowWidth = Console.WindowWidth - 4;
+            int[] maxWidth = new int[] {
+                    Constant.IdColumnPers,
+                    Constant.CategoryColumnPers,
+                    Constant.NameColumnPers,
+                    Constant.UnitColumnPers,
+                    Constant.PriceColumnPers,
+                    Constant.QuantityColumnPers,
+                    Constant.DateColumnPers};
+            for (int i = 1; i < maxWidth.Length; i++)
+            {
+                maxWidth[i] = (int)(Console.WindowWidth / 100f * maxWidth[i]);
+            }
+            Console.Clear();
+            Console.WriteLine(" ." + new string('_', WindowWidth) + ".");
+            Console.WriteLine(" |" + new string(' ', WindowWidth) + "|");
+            Console.WriteLine(" |" + WriteCenter(mainHeader, WindowWidth));
+            Console.WriteLine(" |" + new string('_', WindowWidth) + "|");
+            Console.WriteLine(" |" + WriteStr(maxWidth, ' '));
+            Console.WriteLine(" |" + WriteCenterStr(header, maxWidth));
+            Console.WriteLine(" |" + WriteStr(maxWidth, '_'));
+            for (int i = 0; i < expensesList.Count; i++)
+            {
+                Console.WriteLine(" |" + WriteStr(maxWidth, ' '));
+                string[] row = new string[] {expensesList[i].Id.ToString(),
+                    categories.FirstOrDefault(x => x.Id == expensesList[i].CategoryId).Name,
+                    goods.FirstOrDefault(x => x.Id == expensesList[i].GoodsId).Name,
+                    units.FirstOrDefault(x => x.Id == expensesList[i].UnitId).Name,
+                    expensesList[i].Price.ToString(),
+                    expensesList[i].Quantity.ToString(),
+                    expensesList[i].Date.ToShortDateString()};
+                CellLineBreak(row, maxWidth);
+                Console.WriteLine(" |" + WriteStr(maxWidth, '_'));
+            }
+        }
+
+        private static string WriteStr(int[] maxWidth, char fill)
+        {
+            string line = String.Empty;
+            for (int i = 0; i < maxWidth.Length; i++)
+            {
+                line = line + (new string(fill, maxWidth[i] - 1) + "|");
+            }
+            return line;
+        }
+        private static string WriteCenterStr(string[] word, int[] maxWidth)
+        {
+            string line = String.Empty;
+            for (int i = 0; i < maxWidth.Length; i++)
+            {
+                line = line + WriteCenter(word[i], maxWidth[i]-1);
+            }
+            return line;
+        }
+
+        private static string WriteCenter(string word, int maxWidth)
+        {
+            return new string(' ', (maxWidth) / 2 - word.Length / 2) + $"{word}" + new string(' ', (maxWidth) / 2 - word.Length / 2) + "|";
+        }
     }
 }
