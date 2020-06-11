@@ -3,7 +3,6 @@ using Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace UserInteraction
 {
@@ -25,7 +24,7 @@ namespace UserInteraction
             while (!isInputFieldFinished)
             {
                 string inputLine = Console.ReadLine();
-                if (inputLine.Length == 0)
+                if (inputLine.Trim().Length == 0)
                 {
                     continue;
                 }
@@ -45,7 +44,7 @@ namespace UserInteraction
                 }
                 else
                 {
-                    Catalog catalog = catalogs.FirstOrDefault(x => inputLine.Length > 0 && x.Name.ToLower().StartsWith(inputLine.ToLower()));
+                    Catalog catalog = catalogs.FirstOrDefault(x => x.Name.ToLower().StartsWith(inputLine.ToLower()));
                     if (catalog == null)
                     {
                         Console.WriteLine($" {error} с данным именем не существует. Добавить?");
@@ -302,18 +301,25 @@ namespace UserInteraction
         private static string ValidateName(List<Catalog> catalogs, string editedName)
         {
             string inputLine = editedName;
-            while (inputLine.Trim().Length == 0 ||
-                                        (!string.IsNullOrEmpty(inputLine) &&
-                                        !char.IsDigit(inputLine.ToCharArray()[0]) &&
-                                        !inputLine.Contains(Constant.Delimiter) &&
-                                        catalogs.FirstOrDefault(x => x.Name.ToLower() == inputLine.ToLower()) != null))
+            var isWrongName = IsWrongName(catalogs, inputLine);
+            while (isWrongName)
             {
-                Console.WriteLine($" Имя должно начинаться с буквы, не содержать {Constant.Delimiter} и быть уникальным.");
+                Console.WriteLine($"\n Имя должно начинаться с буквы, не содержать {Constant.Delimiter} и быть уникальным.");
                 inputLine = Console.ReadLine();
+                isWrongName = IsWrongName(catalogs, inputLine);
             }
             return inputLine;
 
         }
+        public static bool IsWrongName(List<Catalog> catalogs, string editedName)
+        {
+            string inputLine = editedName.Trim();
+            bool isEmpty = string.IsNullOrEmpty(inputLine);
+            bool isDigit = int.TryParse(inputLine, out var x);
+            bool isDelimiter = inputLine.Contains(Constant.Delimiter);
+            bool isExist = catalogs.FirstOrDefault(x => x.Name.ToLower() == inputLine.ToLower()) != null;
 
+            return (isEmpty || isDigit || isDelimiter || isExist);
+        }
     }
 }
